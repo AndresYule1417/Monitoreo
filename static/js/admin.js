@@ -1,92 +1,67 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const navLinks = document.querySelectorAll('nav ul li a');
-    const header = document.querySelector('header');
+document.addEventListener('DOMContentLoaded', function() {
+    // Función para cargar datos del resumen
+    function loadOverviewData() {
+        // Simula una llamada a la API. Reemplaza esto con tu lógica real de fetch
+        setTimeout(() => {
+            document.getElementById('waterLevel').textContent = 'Nivel del Agua: 75%';
+            document.getElementById('waterQuality').textContent = 'Estado: Buena';
+            document.getElementById('dailyConsumption').textContent = 'Consumo Diario: 1200 m³';
+        }, 1000);
+    }
 
-    let prevScrollpos = window.pageYOffset;
-
-    const handleNavigation = (links) => {
-        links.forEach(link => {
-            link.addEventListener('click', (e) => {
-                links.forEach(l => l.classList.remove('active'));
-                link.classList.add('active');
-                localStorage.setItem('activeLink', link.getAttribute('href'));
-            });
+    // Función para crear el gráfico de nivel de agua
+    function createWaterLevelChart() {
+        const ctx = document.getElementById('waterLevelChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio'],
+                datasets: [{
+                    label: 'Nivel de Agua (m)',
+                    data: [65, 59, 80, 81, 56, 55],
+                    fill: false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Nivel de Agua en los Últimos 6 Meses'
+                    }
+                }
+            }
         });
-    };
+    }
 
-    const restoreActiveLink = () => {
-        const activeLink = localStorage.getItem('activeLink');
-        if (activeLink) {
-            navLinks.forEach(link => {
-                if (link.getAttribute('href') === activeLink) {
-                    link.classList.add('active');
-                }
-            });
-        } else {
-            if (navLinks.length > 0) {
-                navLinks[0].classList.add('active');
-            }
-        }
-    };
+    // Función para cargar alertas
+    function loadAlerts() {
+        const alertsContainer = document.getElementById('alertsContainer');
+        // Simula una llamada a la API. Reemplaza esto con tu lógica real de fetch
+        const alerts = [
+            'Nivel del agua bajo en el Río Sumapaz.',
+            'Posible contaminación detectada en el Río Magdalena.'
+        ];
 
-    const toggleNavOnScroll = () => {
-        const currentScrollPos = window.pageYOffset;
-        if (prevScrollpos > currentScrollPos || currentScrollPos === 0) {
-            header.style.opacity = "1";
-            header.style.top = "0";
-        } else {
-            header.style.opacity = "0";
-            header.style.top = `-${header.offsetHeight}px`;
-        }
-        prevScrollpos = currentScrollPos;
-    };
+        alerts.forEach(alert => {
+            const alertElement = document.createElement('div');
+            alertElement.className = 'alert fade-in';
+            alertElement.textContent = alert;
+            alertsContainer.appendChild(alertElement);
+        });
+    }
 
-    window.addEventListener('scroll', toggleNavOnScroll);
+    // Cargar datos y crear gráficos
+    loadOverviewData();
+    createWaterLevelChart();
+    loadAlerts();
 
-    handleNavigation(navLinks);
-    restoreActiveLink();
-
-    // Función para cargar y actualizar la gráfica de nivel de agua
-    const updateWaterLevelChart = async () => {
-        try {
-            // Realizar una solicitud al servidor para obtener los datos de la gráfica
-            const response = await fetch('/api/waterLevelData'); // Ruta del servidor que proporciona los datos
-            const data = await response.json();
-
-            // Actualizar la gráfica con los nuevos datos
-            waterLevelChart.data.labels = data.labels;
-            waterLevelChart.data.datasets[0].data = data.waterLevels;
-            waterLevelChart.update();
-        } catch (error) {
-            console.error('Error al cargar los datos de la gráfica:', error);
-        }
-    };
-
-    // Configurar y mostrar el gráfico de nivel de agua inicialmente
-    const ctx = document.getElementById('waterLevelChart').getContext('2d');
-    const waterLevelChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio'],
-            datasets: [{
-                label: 'Nivel del Agua (%)',
-                data: [75, 68, 80, 85, 70, 78, 90],
-                borderColor: 'rgba(30, 144, 255, 1)',
-                borderWidth: 2,
-                fill: false
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
+    // Animación de parallax
+    window.addEventListener('scroll', function() {
+        const parallax = document.querySelector('.parallax');
+        let scrollPosition = window.pageYOffset;
+        parallax.style.backgroundPositionY = scrollPosition * 0.5 + 'px';
     });
-
-    // Actualizar la gráfica de nivel de agua cada vez que se cargue la página
-    updateWaterLevelChart();
-
 });
