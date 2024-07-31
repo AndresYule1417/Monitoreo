@@ -171,6 +171,9 @@ def admin_dashboard():
 def blog_noticias():
     return render_template('blog_noticias.html')
 
+@app.route('/informacion')
+def informacion():
+    return render_template('informacion.html')
 
 
 
@@ -199,6 +202,10 @@ def cuenta():
 def blog_noticias_usuario():
     
     return render_template('user_files/blog_noticias_user.html',  current_user=current_user) 
+
+@app.route('/user_files/informacion')
+def informacion_user(): 
+    return render_template('user_files/informacion_user.html')
 
 @app.route('/editar_cuenta', methods=['GET', 'POST'])
 def editar_cuenta():
