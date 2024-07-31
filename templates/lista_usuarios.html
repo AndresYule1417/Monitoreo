@@ -26,7 +26,7 @@
                                 <td>{{ usuario.nombreusuario }}</td>
                                 <td>{{ usuario.correo }}</td>
                                 <td>
-                                    <a href="{{ url_for('editar_usuario', id=usuario.id) }}" class="btn btn-primary btn-sm">Editar</a>
+                                    <a href="{{ url_for('editar_usuario', id=usuario.id) }}" class="btn btn-primary btn-sm">Editar Cuenta</a>
                                     <a href="{{ url_for('eliminar_usuario', id=usuario.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">Eliminar</a>
                                 </td>
                             </tr>

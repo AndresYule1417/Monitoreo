@@ -1,111 +1,74 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Monitoreo de Recursos Hídricos del Tolima</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/usuario.css') }}">
-</head>
-<body>
-    <header>
-        <div class="nav-wrapper">
-            <nav>
-                <ul>
-                    <li><a href="informacion.html">Información</a></li>                  
-                    <li class="dropdown">
-                        <a href="#" class="dropbtn">Cuenta</a>
-                        <div class="dropdown-content">
-                            <a href="cuenta.html">Editar cuenta</a>
-                            <a href="cerrar_sesion.html">Cerrar sesión</a>
-                        </div>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+<!-- templates/usuario.html -->
+{% extends 'base_user.html' %}
 
-    <div class="parallax">
-        <div class="parallax-content">
-            <h2>Bienvenido Usuario</h2>
-            <p>¡Gracias por utilizar nuestro sistema de monitoreo de recursos hídricos!</p>
-        </div>
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/usuario.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<div class="parallax">
+    <div class="parallax-content">
+        <h2>Bienvenido Usuario</h2>
+        <p>¡Gracias por utilizar nuestro sistema de monitoreo de recursos hídricos!</p>
     </div>
+</div>
 
-    <div class="container">
-        <div class="main-content">
-            <main>
-                <section id="overview">
-                    <h2>Monitoreo Integral de Recursos Hídricos</h2>
-                    <p>El Monitoreo Integral de Recursos Hídricos proporciona una visión completa y 
-                        actualizada sobre el estado y la gestión de los recursos acuíferos en la región del Tolima. 
-                        A través de este sistema, puedes acceder a información esencial sobre tres aspectos fundamentales:</p>
-                    <div class="cards">
-                        <div class="card">
-                            <h3>Monitoreo Hídrico</h3>
-                            <p>Nivel del Agua: 75%</p>
-                        </div>
-                        <div class="card">
-                            <h3>Calidad del Agua</h3>
-                            <p>Estado: Buena</p>
-                        </div>
-                        <div class="card">
-                            <h3>Indicadores</h3>
-                            <p>Consumo Diario: 1200 m³</p>
-                        </div>
+<div class="container">
+    <div class="main-content">
+        <main>
+            <section id="overview">
+                <h2>Monitoreo Integral de Recursos Hídricos</h2>
+                <p>El Monitoreo Integral de Recursos Hídricos proporciona una visión completa y 
+                    actualizada sobre el estado y la gestión de los recursos acuíferos en la región del Tolima. 
+                    A través de este sistema, puedes acceder a información esencial sobre tres aspectos fundamentales:</p>
+                <div class="cards">
+                    <div class="card">
+                        <h3>Monitoreo Hídrico</h3>
+                        <p>Nivel del Agua: 75%</p>
                     </div>
-                </section>
-                <section id="statistics">
-                    <h2>Estadísticas</h2>
-                    <p>La siguiente gráfica muestra el nivel del agua en los últimos meses, proporcionando una visión general de las tendencias y fluctuaciones en el caudal de los cuerpos de agua en la región del Tolima. Esta información puede ser crucial para comprender los patrones estacionales, identificar posibles problemas y tomar decisiones informadas sobre la gestión de los recursos hídricos.</p>
-                    <canvas id="waterLevelChart"></canvas>
-                </section>
-                <section id="alerts">
-                    <h2>Alertas</h2>
-                    <p>Las siguientes alertas destacan eventos significativos relacionados con los recursos hídricos en la región del Tolima. Estas alertas se generan automáticamente a partir de datos en tiempo real y pueden indicar cambios importantes en el estado del agua que requieren atención inmediata o seguimiento adicional por parte de los gestores de recursos hídricos y la comunidad en general.</p>
-                    <div class="alert">
-                        <p>Nivel del agua bajo en el Río Sumapaz.</p>
+                    <div class="card">
+                        <h3>Calidad del Agua</h3>
+                        <p>Estado: Buena</p>
                     </div>
-                    <div class="alert">
-                        <p>Posible contaminación detectada en el Río Magdalena.</p>
+                    <div class="card">
+                        <h3>Indicadores</h3>
+                        <p>Consumo Diario: 1200 m³</p>
                     </div>
-                    <div class="alert">
-                        <p>Se ha registrado un aumento inusual en el caudal del Río Coello.</p>
-                    </div>
-                    <div class="alert">
-                        <p>Se esperan lluvias intensas en las próximas horas en la cuenca del Río Saldaña.</p>
-                    </div>
-                </section>
-                <section id="settings">
-                    <h2>Configuración del Monitoreo</h2>
-                    <p>Personaliza tu experiencia de monitoreo de recursos hídricos ajustando las configuraciones según tus necesidades y preferencias. Puedes definir qué parámetros deseas monitorear con mayor detalle, establecer niveles de alerta personalizados y elegir cómo recibir notificaciones sobre cambios significativos en el estado del agua.</p>
-                </section>
-            </main>
-        </div>
-
-        <aside class="news-updates">
-            <section id="news-updates">
-                <h2>Noticias y Actualizaciones</h2>
-                <p>Mantente informado con las últimas noticias y actualizaciones sobre la gestión de recursos hídricos en la región del Tolima.</p>
-                <div id="news-container" class="news-container">
-                    <div class="news-item">
-                        <h3>Actualización en la Política de Gestión del Agua</h3>
-                        <p>El gobierno regional ha anunciado nuevas políticas para la gestión sostenible de los recursos hídricos, enfocándose en la conservación y el uso eficiente del agua.</p>
-                    </div>
-                    <div class="news-item">
-                        <h3>Proyecto de Reforestación</h3>
-                        <p>Un nuevo proyecto de reforestación ha sido lanzado para proteger las cuencas hidrográficas. Este proyecto busca aumentar la cobertura forestal y reducir la erosión del suelo.</p>
-                    </div>
-                    <button class="news-more-btn" onclick="loadMoreNews()">Más noticias</button>
                 </div>
             </section>
-        </aside>
+            <section id="statistics">
+                <h2>Estadísticas</h2>
+                <p>La siguiente gráfica muestra el nivel del agua en los últimos meses, proporcionando una visión general de las tendencias y fluctuaciones en el caudal de los cuerpos de agua en la región del Tolima. Esta información puede ser crucial para comprender los patrones estacionales, identificar posibles problemas y tomar decisiones informadas sobre la gestión de los recursos hídricos.</p>
+                <canvas id="waterLevelChart"></canvas>
+            </section>
+            <section id="alerts">
+                <h2>Alertas</h2>
+                <p>Las siguientes alertas destacan eventos significativos relacionados con los recursos hídricos en la región del Tolima. Estas alertas se generan automáticamente a partir de datos en tiempo real y pueden indicar cambios importantes en el estado del agua que requieren atención inmediata o seguimiento adicional por parte de los gestores de recursos hídricos y la comunidad en general.</p>
+                <div class="alert">
+                    <p>Nivel del agua bajo en el Río Sumapaz.</p>
+                </div>
+                <div class="alert">
+                    <p>Posible contaminación detectada en el Río Magdalena.</p>
+                </div>
+                <div class="alert">
+                    <p>Se ha registrado un aumento inusual en el caudal del Río Coello.</p>
+                </div>
+                <div class="alert">
+                    <p>Se esperan lluvias intensas en las próximas horas en la cuenca del Río Saldaña.</p>
+                </div>
+            </section>
+            <section id="settings">
+                <h2>Configuración del Monitoreo</h2>
+                <p>Personaliza tu experiencia de monitoreo de recursos hídricos ajustando las configuraciones según tus necesidades y preferencias. Puedes definir qué parámetros deseas monitorear con mayor detalle, establecer niveles de alerta personalizados y elegir cómo recibir notificaciones sobre cambios significativos en el estado del agua.</p>
+            </section>
+        </main>
     </div>
+</div>
 
-    <footer>
-        <p>&copy; 2024 Monitoreo de Recursos Hídricos del Tolima.</p>
-    </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='js/usuario.js') }}">
-</body>
-</html>
+<footer>
+    <p>&copy; 2024 Monitoreo de Recursos Hídricos del Tolima.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='js/usuario.js') }}">
+{% endblock %}

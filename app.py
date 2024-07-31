@@ -1,8 +1,9 @@
+from functools import wraps
 from flask import Flask, jsonify, render_template, request, redirect, url_for, flash, session
-from flask_mail import Mail, Message
-from flask import render_template
 from flask_login import current_user
+from flask_mail import Mail, Message
 import os
+from flask_sqlalchemy import SQLAlchemy
 import database as db
 from datetime import datetime, timedelta
 import secrets
@@ -29,10 +30,12 @@ app.secret_key = "tu_clave_secreta"
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'hidricosrecursos1@gmail.com'
-app.config['MAIL_PASSWORD'] = 'vsnw lbwh xscv tcea'
-app.config['MAIL_DEFAULT_SENDER'] = 'hidricosrecursos1@gmail.com'
+app.config['MAIL_USERNAME'] = 'recursohidrico@ut.edu.co'
+app.config['MAIL_PASSWORD'] = 'laia rybm prme tvmr'
+app.config['MAIL_DEFAULT_SENDER'] = 'recursohidrico@ut.edu.co'
 mail = Mail(app)
+
+
 
 def get_db_connection():
     """Función para obtener la conexión a la base de datos."""
@@ -145,63 +148,101 @@ def reset_password(token):
     conn.close()
     return render_template('reset_password.html')
 
-
-        #RUTAS DE LA APLICACIÓN
 @app.route('/')
 def home():
     return render_template('index.html')
 
-@app.route('/dashboard')
-def dashboard():
-    return render_template('dashboard.html')
+
+
+
 
 @app.route('/admin')
 def admin():
     return render_template('admin.html')
 
-@app.route('/crud')
-def crud():
-    cursor = db.database.cursor()
-    cursor.execute("SELECT * FROM users")
-    myresult = cursor.fetchall()
-    insertObject = []
-    columnNames = [column[0] for column in cursor.description]
-    for record in myresult:
-        insertObject.append(dict(zip(columnNames, record)))
-    cursor.close()
-    return render_template('crud.html', data=insertObject)
 
-@app.route('/registro')
-def registro():
-    return render_template('registro.html')
-
-@app.route('/cuenta')
-def cuenta():
-    conn = get_db_connection()
-    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    cur.execute('SELECT * FROM usuarios WHERE id = %s', (session['id'],))
-    user = cur.fetchone()
-    cur.close()
-    conn.close()
-    return render_template('cuenta.html', current_user=user)
-
-@app.route('/lista_usuarios')
-def lista_usuarios():
-    conn = get_db_connection()
-    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    
-    # Filtrar los usuarios para obtener solo los administradores y limitar a un máximo de 2
-    cur.execute("SELECT id, nombreusuario, correo FROM usuarios WHERE id_rol = 1 LIMIT 2")
-    usuarios = cur.fetchall()
-    
-    cur.close()
-    conn.close()
-    
-    return render_template('lista_usuarios.html', usuarios=usuarios)
+@app.route('/admin_dashboard')
+def admin_dashboard():
+    if 'logueado' not in session or session.get('id_rol') != 1:  # Solo administradores
+        return redirect(url_for('login'))
+    return render_template('admin_dashboard.html')
 
 @app.route('/blog_noticias')
 def blog_noticias():
     return render_template('blog_noticias.html')
+
+
+
+
+@app.route('/cuenta')
+def cuenta():
+    if 'logueado' not in session or session.get('id_rol') != 2:  # Solo usuarios comunes
+        return redirect(url_for('login'))
+    
+    user_id = session['id']
+    conn = get_db_connection()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+    cur.execute("SELECT id, nombreusuario, correo FROM usuarios WHERE id = %s", (user_id,))
+    usuario = cur.fetchone()
+
+    cur.close()
+    conn.close()
+
+    if not usuario:
+        return redirect(url_for('login'))
+
+    return render_template('cuenta.html', usuario=usuario)
+
+
+@app.route('/user_files/blog_noticias_user')
+def blog_noticias_usuario():
+    
+    return render_template('user_files/blog_noticias_user.html',  current_user=current_user) 
+
+@app.route('/editar_cuenta', methods=['GET', 'POST'])
+def editar_cuenta():
+    if 'logueado' not in session or session.get('id_rol') != 2:
+        return redirect(url_for('login'))
+
+    user_id = session['id']
+    conn = get_db_connection()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+    if request.method == 'POST':
+        nombreusuario = request.form['nombreusuario']
+        correo = request.form['correo']
+        password = request.form.get('password')
+        confirm_password = request.form.get('confirm_password')
+        
+        if password and password == confirm_password:
+            cur.execute("""
+                UPDATE usuarios
+                SET nombreusuario = %s, correo = %s, password = %s
+                WHERE id = %s
+            """, (nombreusuario, correo, password, user_id))
+        else:
+            cur.execute("""
+                UPDATE usuarios
+                SET nombreusuario = %s, correo = %s
+                WHERE id = %s
+            """, (nombreusuario, correo, user_id))
+
+        conn.commit()
+
+        cur.close()
+        conn.close()
+
+        flash('Cuenta actualizada correctamente.', 'success')
+        return redirect(url_for('cuenta'))
+
+    cur.execute("SELECT * FROM usuarios WHERE id = %s", (user_id,))
+    usuario = cur.fetchone()
+    cur.close()
+    conn.close()
+
+    return render_template('editar_usuario2.html', usuario=usuario)
+
 
 
 
@@ -262,6 +303,7 @@ def update_password():
     return redirect(url_for('cuenta'))
 
 
+
 @app.route('/acceso-login', methods=["GET", "POST"])
 def login():
     if request.method == 'POST' and 'txtCorreo' in request.form and 'txtPassword' in request.form:
@@ -275,7 +317,7 @@ def login():
         cur.close()
         conn.close()
     
-        if account and account['password'] == _password:  
+        if account and account['password'] == _password:  # Comparar contraseñas en texto plano
             session['logueado'] = True
             session['id'] = account['id']
             session['id_rol'] = account['id_rol']
@@ -288,6 +330,19 @@ def login():
             flash('Usuario o Contraseña Incorrectas', 'danger')
     
     return render_template('ingresar.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('logueado', None)
+    session.pop('id', None)
+    session.pop('id_rol', None)
+    flash('Has cerrado sesión correctamente.', 'info')
+    return redirect(url_for('login'))
+
+
+@app.route('/registro')
+def registro():
+    return render_template('registro.html')
 
 @app.route('/crear-registro', methods=["POST"])
 def crear_registro():
@@ -317,7 +372,7 @@ def crear_registro():
     numero_administradores = cur.fetchone()[0]
     
     if rol == '1' and numero_administradores >= 2:
-        flash('Se ha alcanzado el límite de dos administradores.', 'danger')
+        flash('Ya se ha alcanzado el límite de dos administradores.', 'danger')
         cur.close()
         conn.close()
         return redirect(url_for('registro'))
@@ -355,13 +410,18 @@ def mantenimiento():
     conn.close()
     return render_template("mantenimiento.html", usuarios=usuarios)
 
-@app.route('/logout')
-def logout():
-    session.pop('logueado', None)
-    session.pop('id', None)
-    session.pop('id_rol', None)
-    flash('Has cerrado sesión correctamente.', 'info')
-    return redirect(url_for('login'))
+@app.route('/crud')
+def crud():
+    
+    cursor = db.database.cursor()
+    cursor.execute("SELECT * FROM users")
+    myresult = cursor.fetchall()
+    insertObject = []
+    columnNames = [column[0] for column in cursor.description]
+    for record in myresult:
+        insertObject.append(dict(zip(columnNames, record)))
+    cursor.close()
+    return render_template('crud.html', data=insertObject)
 
 
 @app.route('/proyecto/<int:id>')
@@ -388,14 +448,21 @@ def addUser():
         db.database.commit()
     return redirect(url_for('crud'))
 
-@app.route('/delete/<string:id>')
+@app.route('/delete/<string:id>', methods=['POST'])
 def delete(id):
     cursor = db.database.cursor()
-    sql = "DELETE FROM users WHERE id=%s"
-    data = (id,)
-    cursor.execute(sql, data)
-    db.database.commit()
-    return redirect(url_for('crud'))
+    try:
+        sql = "DELETE FROM users WHERE id=%s"
+        data = (id,)
+        cursor.execute(sql, data)
+        db.database.commit()
+        return jsonify({'success': True})
+    except Exception as e:
+        print(f'Error: {e}')
+        db.database.rollback()
+        return jsonify({'success': False})
+
+
 
 @app.route('/edit/<string:id>', methods=['POST'])
 def edit(id):
@@ -422,7 +489,22 @@ def search_projects():
     cursor.close()
     return render_template('crud.html', data=insertObject)
 
-# Ruta para editar usuario
+@app.route('/lista_usuarios')
+def lista_usuarios():
+    conn = get_db_connection()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    
+    # Filtrar los usuarios para obtener solo los administradores y limitar a un máximo de 2
+    cur.execute("SELECT id, nombreusuario, correo FROM usuarios WHERE id_rol = 1 LIMIT 2")
+    usuarios = cur.fetchall()
+    
+    cur.close()
+    conn.close()
+    
+    return render_template('lista_usuarios.html', usuarios=usuarios)
+
+# Ruta para editar usuario (ADMINISTRADOR)
+
 @app.route('/editar-usuario/<int:id>', methods=['GET', 'POST'])
 def editar_usuario(id):
     conn = get_db_connection()
@@ -431,8 +513,16 @@ def editar_usuario(id):
     if request.method == 'POST':
         nombre_usuario = request.form['nombreusuario']
         correo = request.form['correo']
+        password = request.form.get('password')
+        confirm_password = request.form.get('confirm_password')
         
-        cur.execute("UPDATE usuarios SET nombreusuario = %s, correo = %s WHERE id = %s", (nombre_usuario, correo, id))
+        # Actualizar la contraseña sin encriptar si es proporcionada y coincide
+        if password and password == confirm_password:
+            cur.execute("UPDATE usuarios SET nombreusuario = %s, correo = %s, password = %s WHERE id = %s",
+                        (nombre_usuario, correo, password, id))
+        else:
+            cur.execute("UPDATE usuarios SET nombreusuario = %s, correo = %s WHERE id = %s",
+                        (nombre_usuario, correo, id))
         conn.commit()
         cur.close()
         conn.close()
@@ -444,6 +534,33 @@ def editar_usuario(id):
     cur.close()
     conn.close()
     return render_template('editar_usuario.html', usuario=usuario)
+
+
+
+@app.route('/usuario')
+def usuario():
+    return render_template('usuario.html')
+
+@app.route('/informacion_usuario')
+def informacion_usuario():
+    if 'logueado' not in session:
+        return redirect(url_for('login'))
+    
+    user_id = session['id']
+    conn = get_db_connection()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+    cur.execute("SELECT id, nombreusuario, correo FROM usuarios WHERE id = %s", (user_id,))
+    usuario = cur.fetchone()
+
+    cur.close()
+    conn.close()
+
+    if not usuario:
+        return redirect(url_for('login'))
+
+    return render_template('informacion_usuario.html', usuario=usuario)
+
 
 # Ruta para eliminar usuario
 @app.route('/eliminar-usuario/<int:id>')
@@ -457,6 +574,16 @@ def eliminar_usuario(id):
     conn.close()
     flash('Usuario eliminado correctamente.', 'success')
     return redirect(url_for('lista_usuarios'))
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'id' not in session:
+            flash('Please log in to access this page.', 'danger')
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
 
 if __name__ == '__main__':
     app.run(debug=True)
