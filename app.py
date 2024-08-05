@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, render_template, request, redirect, url_for, flash, session
 from flask_mail import Mail, Message
 from flask import render_template
+from flask import make_response
 from flask_login import current_user
 import os
 import database as db
@@ -11,6 +12,11 @@ import psycopg2.extras
 import random
 import re
 import string
+from json import loads, dumps
+
+import pandas as pd
+
+from file_management import save_file, myPath
 
 app = Flask(__name__, template_folder='templates')
 
@@ -343,8 +349,6 @@ def crear_registro():
     flash('Usuario registrado exitosamente.', 'success')
     return redirect(url_for('login'))
 
-
-
 @app.route('/mantenimiento.html')
 def mantenimiento():
     conn = get_db_connection()
@@ -368,22 +372,69 @@ def logout():
 def proyecto_detail(id):
     cursor = db.database.cursor()
     cursor.execute("SELECT * FROM users WHERE id = %s", (id,))
-    proyecto = cursor.fetchone()
+    proyecto = cursor.fetchone()    
     if proyecto:
-        proyecto_dict = dict(zip([column[0] for column in cursor.description], proyecto))
+        proyecto_dict = dict(zip([column[0] for column in cursor.description], proyecto))        
+        fileName = "./media/" + proyecto_dict['archivo']        
+        if os.path.exists(fileName):        
+            df_rham = pd.read_excel(fileName, sheet_name='RENDIMIENTO HÍDRICO', skiprows=4, usecols="A:M")  
+            df_rham.rename(columns={'Unnamed: 0':'UA'}, inplace=True)
+            df_rham = df_rham.reset_index(drop=True).set_index('UA')
+            result = df_rham.to_json(orient="split") #split, records, index, columns, values:no, table:no
+            parsed = loads(result)
+            data = dumps(parsed, indent=4)
     else:
         proyecto_dict = None
+        data = None
     cursor.close()
     return render_template('proyecto_detail.html', proyecto=proyecto_dict)
 
+#*****M_CDBL*****
+@app.route('/api/rendimientoHidrico/<int:id>')
+def rendimientoHidrico(id):
+    print("*****1*****")
+    print(id)
+    cursor = db.database.cursor()
+    cursor.execute("SELECT * FROM users WHERE id = %s", (id,))
+    proyecto = cursor.fetchone()    
+    if proyecto:   
+        proyecto_dict = dict(zip([column[0] for column in cursor.description], proyecto))     
+        fileName = "./media/" + proyecto_dict['archivo']        
+        if os.path.exists(fileName):        
+            df_rham = pd.read_excel(fileName, sheet_name='RENDIMIENTO HÍDRICO', skiprows=4, usecols="A:M")  
+            df_rham.rename(columns={'Unnamed: 0':'UA'}, inplace=True)
+            df_rham = df_rham.reset_index(drop=True).set_index('UA')
+            result1 = df_rham.to_json(orient="split")
+            parsed1 = loads(result1)                      
+
+            df_rhah = pd.read_excel(fileName, sheet_name='RENDIMIENTO HÍDRICO', skiprows=4, usecols="P:AB")
+            df_rhah.rename(columns={'Unnamed: 15':'UA'}, inplace=True)
+            df_rhah = df_rhah.reset_index(drop=True).set_index('UA')
+            result2 = df_rhah.to_json(orient="split")
+            parsed2 = loads(result2)            
+
+            df_rhas = pd.read_excel(fileName, sheet_name='RENDIMIENTO HÍDRICO', skiprows=4, usecols="AD:AP")
+            df_rhas.rename(columns={'Unnamed: 29':'UA'}, inplace=True)
+            df_rhas = df_rhas.reset_index(drop=True).set_index('UA')
+            result3 = df_rhas.to_json(orient="split")
+            parsed3 = loads(result3)                     
+    else:        
+        data = None
+    return make_response({"rham": parsed1, "rhah": parsed2, "rhas": parsed3}, 200)  
+
+#*****M_CDBL*****
 @app.route('/user', methods=['POST'])
-def addUser():
+def addUser():     
+    file = request.files['patch']    
     name = request.form['name']
-    creation_date = request.form['creation_date']
-    if name and creation_date:
+    creation_date = request.form['creation_date']    
+    if name and creation_date and file:        
+        filename = save_file(file, file.filename, "data")    
+        print(filename)
+        print(len(filename))       
         cursor = db.database.cursor()
-        sql = "INSERT INTO users (name, creation_date) VALUES (%s, %s)"
-        data = (name, creation_date)
+        sql = "INSERT INTO users (name, creation_date, archivo) VALUES (%s, %s, %s)"
+        data = (name, creation_date, filename)
         cursor.execute(sql, data)
         db.database.commit()
     return redirect(url_for('crud'))

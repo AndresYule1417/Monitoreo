@@ -97,3 +97,41 @@ h1 {
 .fade-in {
     animation: fadeIn 0.5s ease-in;
 }
+
+
+/******CDBL******/
+.accordion{    
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    transition: 0.4s;
+    margin-bottom: 8px;
+    margin-top: 8px;
+}
+
+.active, .accordion:hover {
+    background-color: #ccc;
+}
+
+.panel {       
+    background-color: white;
+    /*overflow: hidden; */  
+    justify-content: center;
+}
+
+.myMarginLR{
+    margin-right: 16px;
+    margin-left: 16px;
+    text-align: center;
+}
+
+.verticalP{    
+    position: relative;
+    writing-mode: tb-rl;
+    transform: rotate(-180deg);   
+    top: 25%;    
+}

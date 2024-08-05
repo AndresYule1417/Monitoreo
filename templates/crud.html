@@ -15,7 +15,7 @@
     <div class="container fade-in">
         <div class="card shadow">
             <div class="card-body">
-                <form action="/user" method="POST">
+                <form action="/user" method="POST" enctype="multipart/form-data">
                     <div class="row mb-3">
                         <div class="col">
                             <label for="name" class="form-label">Nombre Proyecto</label>
@@ -24,6 +24,10 @@
                         <div class="col">
                             <label for="creation_date" class="form-label">Fecha de Creación</label>
                             <input type="datetime-local" class="form-control mb-3" id="creation_date" name="creation_date" required>
+                        </div>                        
+                        <div class="col">
+                            <label for="patch" class="form-label">Archivo</label>
+                            <input type="file" class="form-control mb-3" id="patch" name="patch" required>
                         </div>
                         <div class="col d-flex align-items-end">
                             <button class="btn btn-primary w-10" type="submit">Guardar</button>

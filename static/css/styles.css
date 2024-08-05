@@ -418,7 +418,7 @@ font-size: 1.2rem;
 position: absolute;
 top: 50%;
 transform: translateY(-50%);
-background: rgba(0, 0, 0, 0.5);
+background: rgba(0, 0, 0, 0.8);
 color: white;
 padding: 10px 15px;
 border: none;
