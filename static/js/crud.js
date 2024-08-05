@@ -60,19 +60,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Función para eliminar un proyecto
-function deleteProject(projectId) {
-    if (confirm('¿Estás seguro de que deseas eliminar este proyecto?')) {
-        window.location.href = `/delete/${projectId}`;
-    }
-}
-
-// Función para buscar un proyecto
+// Función para buscar proyectos
 function searchProject() {
-    const query = document.getElementById('searchQuery').value;
-    if (query) {
-        window.location.href = `/search_projects?query=${query}`;
-    }
+    const searchQuery = document.getElementById('searchQuery').value.toLowerCase();
+    const tableRows = document.querySelectorAll('tbody tr');
+
+    tableRows.forEach(row => {
+        const projectName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+        if (projectName.includes(searchQuery)) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
 }
 
 // Función para editar un proyecto
@@ -100,3 +100,26 @@ function editProject(id) {
 
     return false;  // Previene el envío del formulario por defecto
 }
+
+// Función para eliminar un proyecto
+function deleteProject(id) {
+    if (confirm('¿Estás seguro de que quieres eliminar este proyecto?')) {
+        fetch(`/delete/${id}`, {  // Cambia aquí la ruta
+            method: 'POST'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Proyecto eliminado con éxito');
+                location.reload();
+            } else {
+                alert('Error al eliminar el proyecto');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al eliminar el proyecto');
+        });
+    }
+}
+

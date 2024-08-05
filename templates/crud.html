@@ -89,7 +89,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="editDate{{ d.id }}" class="form-label">Fecha de Creación</label>
-                                        <input type="datetime-local" class="form-control" id="editDate{{ d.id }}" name="creation_date" value="{{ d.creation_date.strftime('%Y-%m-%dT%H:%M:%S') }}" required>
+                                        <input type="datetime-local" class="form-control" id="editDate{{ d.id }}" name="creation_date" value="{{ d.creation_date.strftime('%Y-%m-%dT%H:%M') }}" required>
                                     </div>
                                     <button type="submit" class="btn btn-primary">Guardar cambios</button>
                                 </form>

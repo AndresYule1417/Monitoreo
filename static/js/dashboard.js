@@ -55,5 +55,3 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', checkScreenSize);
     checkScreenSize(); // Llamar al inicio para configurar correctamente
 });
-
-        // Mostrar alerta al intentar cerrar sesión
