@@ -81,7 +81,7 @@ body {
 .main-content {
     margin-left: 60px;
     padding: 20px;
-    transition: margin-left 0.3s ease;
+    transition: margin-left 0.5s ease;
 }
 
 .main-content-expanded {
@@ -90,8 +90,6 @@ body {
 
 .sidebar-toggle {
     display: block;
-
-
 }
 
 @media screen and (max-width: 768px) {
