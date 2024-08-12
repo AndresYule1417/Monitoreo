@@ -1,8 +1,5 @@
-import { start } from "./loader";
-
 document.addEventListener('DOMContentLoaded', async function() {
-    console.log(start);
-
+   
     // Animación de fade-in para los elementos de la página
     const elements = document.querySelectorAll('.fade-in');
     elements.forEach(element => {
