@@ -14,6 +14,8 @@ import re
 import string
 from json import loads, dumps
 
+from flask import make_response
+
 import pandas as pd
 
 from file_management import save_file, myPath
@@ -440,6 +442,7 @@ def proyecto_detail(id):
     cursor.execute("SELECT * FROM users WHERE id = %s", (id,))
     proyecto = cursor.fetchone()    
     if proyecto:
+        print("*****1*****")
         proyecto_dict = dict(zip([column[0] for column in cursor.description], proyecto))        
         fileName = "./media/" + proyecto_dict['archivo']        
         if os.path.exists(fileName):        
