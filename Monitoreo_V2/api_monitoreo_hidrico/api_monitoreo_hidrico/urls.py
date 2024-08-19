@@ -1,4 +1,7 @@
-from django.contrib import admin
+#Archivo en el cual estan las rutas y poder hacer las peticiones desde el cliente
+
+#importar librerias
+from django.contrib import admin   
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 

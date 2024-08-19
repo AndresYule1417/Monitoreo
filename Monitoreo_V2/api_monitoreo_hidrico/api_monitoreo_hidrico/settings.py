@@ -2,11 +2,10 @@ from pathlib import Path
 from datetime import timedelta
 import os
 
+#Archivo en donde se encuentra la configuracion del proyecto
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-f22+g*mybkqzfe4wiu1+=f=n1efnk&f-(v=t0h(u3shywoy^#_'
@@ -16,8 +15,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
-# Application definition
-
+#Aplicaciones propias del framework
 BASE_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -27,11 +25,13 @@ BASE_APPS = [
     'django.contrib.staticfiles',
 ]
 
+#Aplicaciones creadas por el usuario
 LOCAL_APPS = [       
     'usuarios',  
     'proyectos',  
 ]
 
+#aplicaciones instaladas por el usuario
 THIRD_APPS = [    
     'rest_framework',
     'rest_framework.authtoken', 
@@ -42,6 +42,7 @@ THIRD_APPS = [
 
 INSTALLED_APPS = BASE_APPS + LOCAL_APPS + THIRD_APPS
 
+#Configuracion para la autentificacion de las sesiones
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -49,6 +50,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',)
 }
 
+#El middleware es un marco de enlaces al procesamiento de solicitudes/respuestas de Django
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
@@ -60,8 +62,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+#Configuracion para llamar las rutas
 ROOT_URLCONF = 'api_monitoreo_hidrico.urls'
 
+#Configuracion para llamar a archivos HTML
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -80,10 +84,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'api_monitoreo_hidrico.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
+#Configuracion de la base de datos a utilizar
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -95,9 +96,6 @@ DATABASES = {
     }
 }
 
-
-# Password validation
-# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -126,8 +124,10 @@ USE_I18N = True
 
 USE_TZ = True
 
+#Configuacion del modelo usuarios a utilizar
 AUTH_USER_MODEL = 'usuarios.CustomUser'
 
+#Configuracion de cabezeras que permiten el acceso del lado del cliente
 CORS_ALLOWED_ORIGINS = [        
     "http://localhost:4200",   
     "http://10.10.10.3:4200",     
@@ -143,22 +143,17 @@ CORS_ORIGIN_WHITELIST = [
     "http://10.10.10.3:4200",     
 ]
 
+#Configuracion de parametros para el uso de las seciones
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=300),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=300), #tiempo activo de la secion
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
 }
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.0/howto/static-files/
-
+#Configuracion de rutas estaticas para CSS, IMG, TEMPLATES
 STATIC_URL = 'static/'
 MEDIA_URL =  'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

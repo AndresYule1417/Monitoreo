@@ -16,12 +16,9 @@ class Login(TokenObtainPairView):
 
     def post(self, request, *args, **kwargs):           
         email = request.data.get('email', '')
-        password = request.data.get('password', '')   
-        print(email, password)         
-        user = authenticate(email=email, password=password)
-        print(user)
-        if(user):
-            print("*****1*****")             
+        password = request.data.get('password', '')              
+        user = authenticate(email=email, password=password)        
+        if(user):                       
             loginSerializar = self.serializer_class(data=request.data)           
             if(loginSerializar.is_valid()):
                 userSerializer = LoginUserSerializer(user)
