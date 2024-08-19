@@ -42,4 +42,4 @@ class UserViewSet(viewsets.GenericViewSet):
             serializer.save()
             return Response({'message': 'Usuario Reguistrado'}, status=status.HTTP_201_CREATED)        
         print(serializer.errors)
-        return Response({'message': 'Error en Registro', 'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'message': 'Error en Registros', 'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
