@@ -1,5 +1,6 @@
 from django.db import models
 
+#Clase para definir el modelo de un proyecto el cual se crea en la base de datos
 class Proyectos(models.Model):
     nombre = models.CharField(max_length=64, null=False, blank=False)
     fecha = models.DateTimeField(null=False, blank=False)

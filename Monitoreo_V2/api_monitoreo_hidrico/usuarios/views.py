@@ -11,9 +11,11 @@ from usuarios.api.serializers import LoginUserSerializer, CustomTokenObtainPairS
 
 from usuarios.models import CustomUser
 
+#Clase para gestionar el login de un usuario, retorna el token, el nomnre del usuario, mesage y refresh token
 class Login(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer    
 
+    #funcion que capata la peticion post con email y password
     def post(self, request, *args, **kwargs):           
         email = request.data.get('email', '')
         password = request.data.get('password', '')              
@@ -30,7 +32,8 @@ class Login(TokenObtainPairView):
                 }, status=status.HTTP_200_OK)
             return Response({'error': 'Contraseña o nombre de usuario incorrectos'}, status=status.HTTP_400_BAD_REQUEST)
         return Response({'error': 'Contraseña o nombre de usuario incorrectos'}, status=status.HTTP_400_BAD_REQUEST)
-    
+
+#clase para salir de la secion
 class Logout(GenericAPIView):
     def post(self, request, *args, **kwargs):
         user = CustomUser.objects.filter(id=request.data.get('user', 0))

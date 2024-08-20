@@ -6,16 +6,19 @@ from proyectos.models import Proyectos
 
 from api_monitoreo_hidrico import settings
 
+#clase para interpretar los datos python a json
 class CreateProyectoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Proyectos
-        fields = "__all__"
+        model = Proyectos#modelo a utilizar
+        fields = "__all__"#llama a todos los campos
 
+#clase para interpretar los datos python a json
 class UpdateProyectoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Proyectos
-        fields = "__all__"
+        model = Proyectos#modelo a utilizar
+        fields = "__all__"#llama a todos los campos
     
+    #funcion que gestiona un archivo para sobreescribir o actualizar
     def validate_archivo(self, value):              
         myPath = settings.MEDIA_ROOT + "/" + str(self.instance.archivo)        
         try:
@@ -27,6 +30,7 @@ class UpdateProyectoSerializer(serializers.ModelSerializer):
         except:
             return value       
     
+    #funcion que actualiza un proyecto
     def update(self, instance, validated_data):            
         instance.nombre = validated_data['nombre']
         instance.fecha = validated_data['fecha']
