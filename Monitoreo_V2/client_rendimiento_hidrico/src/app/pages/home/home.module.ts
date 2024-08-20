@@ -10,7 +10,8 @@ import { RegisterComponent } from './register/register.component';
 import { StartComponent } from './start/start.component';
 import { RecoverComponent } from './recover/recover.component';
 
-
+//archivo donde se cargan los modulos creados por el usuario y se importan 
+//componentes que se van a utilizar
 @NgModule({
   declarations: [
     LoginComponent,

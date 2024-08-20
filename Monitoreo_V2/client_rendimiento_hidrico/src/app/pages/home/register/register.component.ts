@@ -12,6 +12,7 @@ import { AccountsService } from '../../account/accounts/accounts.service';
 })
 export class RegisterComponent implements OnInit {
 
+  //declaracion de variables
   submitted: boolean = false;
 
   flagEye: boolean = false;
@@ -22,6 +23,7 @@ export class RegisterComponent implements OnInit {
 
   flagPassword: boolean = false;
 
+  //declaracion de formulario
   form = new FormGroup({
     username: new FormControl({value: "", disabled: false}, Validators.required),
     email: new FormControl({value: "", disabled: false}, [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
@@ -29,8 +31,12 @@ export class RegisterComponent implements OnInit {
     rpassword: new FormControl({value: "", disabled: false}, [Validators.required, Validators.minLength(6), Validators.pattern("(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{6,}")]),
   })
   
+  //invocacion de objetos o variables a utilizar
   constructor(private elementRef:ElementRef, private router:Router, private service: LoginService, private accountsService: AccountsService){}
 
+  //funcion q se ejecuta despues del constructor
+  //obtiene variables de html
+  //valida si esta logeado
   ngOnInit(): void {
     this.input = this.elementRef.nativeElement.querySelector('#input'); 
     this.input1 = this.elementRef.nativeElement.querySelector('#input1'); 
@@ -40,23 +46,28 @@ export class RegisterComponent implements OnInit {
     });
   }
 
+  //funcion que retorna datos del formulario
   get f() {     
     return this.form.controls; 
   }
 
+  //funcion que se ejecuta con el boton html del formulario
   onSubmit(){
     this.submitted = true;    
     this.flagPassword = false;
 
+    //si formulario es invalido no pasa
     if (this.form.invalid) {      
       return;
     }  
     
+    //si las contraseñas son diferentes no pasa
     if(this.form.value["password"] != this.form.value["rpassword"]){
       this.flagPassword = true;      
       return;
     }      
-    
+
+    //llamado a funcion create del servicio, crea un nuevo usuario    
     this.accountsService.create(this.form.value).subscribe({
       next: (result) => {          
         this.router.navigate(['/home']);    
@@ -64,6 +75,7 @@ export class RegisterComponent implements OnInit {
     });
   }
 
+  //cambio de icono en la caja de texto de password
   onPassword(){    
     this.input.type = "text";
     this.flagEye = !this.flagEye;

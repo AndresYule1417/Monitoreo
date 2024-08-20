@@ -7,8 +7,7 @@ import { RegisterComponent } from './register/register.component';
 import { StartComponent } from './start/start.component';
 import { RecoverComponent } from './recover/recover.component';
 
-import { authGuard } from '../../shared/guards/auth.guard'; 
-
+//definicion de rutas dentro de home
 const routes: Routes = [
   {
     path: "",
@@ -28,5 +27,3 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class HomeRoutingModule { }
-
-//{scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled', scrollOffset: [0, 64]}

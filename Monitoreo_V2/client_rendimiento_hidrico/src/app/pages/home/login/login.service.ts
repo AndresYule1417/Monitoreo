@@ -1,3 +1,4 @@
+//servicio creado para poder iniciar sesion, salir de la sesion y comprobar si la sesion esta activa
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -19,10 +20,12 @@ export class LoginService {
 
   constructor(private http: HttpClient, private myRouter: Router) { }
 
+  //obtener datos del usuario logeado
   get user$(): Observable<UserLogin | null> {    
     return this.user.asObservable();
   }
 
+  //funcion que ejecuta peticion post con email y contraseña para poder ingresar
   login(data: any): Observable<UserLogin | void> {      
     return this.http.post<UserLogin>(`${environment.API_URL}/login/`, data).pipe(map((user: UserLogin) => {      
       this.user.next(user);        
@@ -31,6 +34,7 @@ export class LoginService {
     }), catchError((error) => this.handlerError(error)));
   }
 
+  //funcion que elimina los datos del usuario logeado
   logout(){
     //const headers  = { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('user') || '{}').token + ''};
     //this.usuario = JSON.parse(localStorage.getItem('user') || '{}').user; 
@@ -43,6 +47,7 @@ export class LoginService {
     this.myRouter.navigate(['/home/start']);    
   }
 
+  //funcion que realiza peticion post paa verificar token activo
   checkToken(){           
     var data = this.getToken()
     return this.http.post(`${environment.API_URL}/api/token/verify/`, data).pipe(map(result => {      
@@ -50,6 +55,7 @@ export class LoginService {
     }), catchError((error) => this.handlerError(error)));              
   }
 
+  //funcion que retorna el token guardado
   getToken(){
     var data = {};
     if(this.isLocalStorageAvailable) {
@@ -59,6 +65,7 @@ export class LoginService {
     return data; 
   }
 
+  //funcion que se ejecuta cuando ha errores en peticiones a la api
   private handlerError(error: HttpErrorResponse){
     var message = '';
     console.log(error);

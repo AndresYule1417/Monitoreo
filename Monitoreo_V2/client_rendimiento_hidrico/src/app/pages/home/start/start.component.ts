@@ -9,9 +9,7 @@ import { LoginService } from '../login/login.service';
   styleUrl: './start.component.scss'
 })
 export class StartComponent implements OnInit {
-
-  //slides: any[] = new Array(3).fill({ id: -1, src: '', title: '', subtitle: '' });
-
+  
   slides = [
     { image: 'assets/img/carrulcl-monit-hidr.jpg', alt: 'First slide' },
     { image: 'assets/img/carrucl-segui-calid-agua.jpg', alt: 'Second slide' },
