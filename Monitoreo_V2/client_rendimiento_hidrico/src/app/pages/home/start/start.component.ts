@@ -16,14 +16,18 @@ export class StartComponent implements OnInit {
     { image: 'assets/img/carrucl-evalu-recur-hidr.jpg', alt: 'Third slide' }
   ];
 
+  //invocacion de variables u objetos a utilizar
   constructor(private elementRef:ElementRef, private service:LoginService, private router:Router){}
 
+  //funcion que se ejecuta despues del constructor
+  //verifica si el usuario esta logeado
   ngOnInit(): void {     
     this.service.checkToken().subscribe(result => {      
       this.router.navigate(['/account']);
       return false;
     });
     
+    //funcion que cambia la inclinacion de imagen cuando el mouse esta encima 
     const images = this.elementRef.nativeElement.querySelectorAll('.img-fluid');
     images.forEach((img:any) => {
       img.addEventListener('mousemove', (event:any) => {          
@@ -37,16 +41,17 @@ export class StartComponent implements OnInit {
           img.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.05, 1.05, 1.05)`;          
       });
       
+      //funcion que vuelve la imagen a su origen cuando el mouse sale
       img.addEventListener('mouseleave', function() {
           img.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
       });
     });
   }
 
+  //funcion q navega dentro de la misma pagina
   jumpToSection(section: string | null) {
     if(section){
       document.getElementById(section)?.scrollIntoView({behavior:'smooth'});
     }      
   }  
-
 }

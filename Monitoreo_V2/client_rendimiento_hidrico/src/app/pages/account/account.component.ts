@@ -10,6 +10,7 @@ import { LoginService } from '../home/login/login.service';
 })
 export class AccountComponent implements OnInit {
 
+  //definicion de variables u objetos a utilizar
   @ViewChild('sidebarToggle', { static: false }) sidebarToggle!: ElementRef;
 
   resizeObservable!: Observable<Event>;
@@ -22,8 +23,11 @@ export class AccountComponent implements OnInit {
 
   flagExpanded: boolean = false;
 
+  //invocacion de servicio
   constructor(private service:LoginService){}
 
+  //funcion que se ejecuta despues del constructor
+  //si detecta cambios en el tamaño de la pantalla llama a una funcion
   ngOnInit(): void {
     this.resizeObservable = fromEvent(window, 'resize')
     this.resizeSubscription = this.resizeObservable.subscribe( evt => {
@@ -33,6 +37,8 @@ export class AccountComponent implements OnInit {
     this.checkScreenSize();      
   }
 
+  //funcion que pregunta si la pantalla es mayor a 768 
+  //reduce el tamaño de la barra izquierda
   checkScreenSize(){
     this.myWidth = window.innerWidth;    
     if(this.myWidth>768){
@@ -42,16 +48,19 @@ export class AccountComponent implements OnInit {
     }
   }  
   
+  //funcion que detecta que el mouse este encima de sidebar y expande el contenido
   onHover_li(){    
     this.onSidebar = "sidebar-expanded";
     this.onMainContent = "main-content-expanded";
   }
 
+  //funcion que detecta que el mouse este fuera de sidebar y vuelve al origen el contenido
   onHoverOut_li(){
     this.onSidebar = "sidebar";
     this.onMainContent = "main-content";
   }
 
+  //funcion que expande y reduce sidebar dependiendo del tamaño de la pantalla
   onClick(){    
     this.flagExpanded = !this.flagExpanded;
     if(this.flagExpanded){
@@ -63,6 +72,7 @@ export class AccountComponent implements OnInit {
     }    
   }
 
+  //funcion para salir de la cuenta principal
   logout(){
     this.service.logout();
   }

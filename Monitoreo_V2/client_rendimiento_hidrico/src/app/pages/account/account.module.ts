@@ -15,7 +15,8 @@ import { AccountsComponent } from './accounts/accounts.component';
 import { DialogAccountComponent } from './accounts/dialog-account/dialog-account.component';
 import { NewsComponent } from './news/news.component';
 
-
+//declaracion de componentes creados por el usuario
+//importacion de modulos a utilizar
 @NgModule({
   declarations: [
     AdminComponent,

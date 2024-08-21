@@ -17,7 +17,8 @@ export class NewsComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     //console.log(this.newsContainer.nativeElement);        
   }
-
+  
+  //funcion que se ejecuta despues del constructor y llama a la funcion updateNews
   ngOnInit(): void {
     //const newsContainer = document.getElementById('news-container');
     this.updateNews();   
@@ -25,9 +26,9 @@ export class NewsComponent implements OnInit, AfterViewInit {
       console.log("noticias");
       this.updateNews();
     }, 18000);*/
-  }
-  
+  }  
 
+  //funcion que lee una direccion para sacar sus componenetes html y renderizarlos en la pagina web
   async updateNews(){
     try{
       const response = await fetch(`${this.proxyUrl}${encodeURIComponent(this.rssFeedUrl)}`);

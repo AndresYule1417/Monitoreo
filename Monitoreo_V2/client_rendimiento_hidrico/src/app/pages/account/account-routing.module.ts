@@ -9,6 +9,7 @@ import { InformationComponent } from './information/information.component';
 import { AccountsComponent } from './accounts/accounts.component';
 import { NewsComponent } from './news/news.component';
 
+//definicion de rutas hijas dentro de account
 const routes: Routes = [
   {
     path: "",
