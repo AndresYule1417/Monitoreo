@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.decorators import action
 
 import os
 import pandas as pd
@@ -79,3 +80,103 @@ class ProyectosViewSet(viewsets.GenericViewSet):
 
             return Response(data={"project":result_serializer.data, "xlsx":{"rham": parsed1, "rhah": parsed2, "rhas": parsed3}}, status=status.HTTP_200_OK)
         return Response({'error':'No existe proyecto'}, status=status.HTTP_400_BAD_REQUEST) 
+    
+    @action(detail=True, methods=['get']) 
+    def retrieve_ohts(self, request, pk=None):
+        result = self.serializer_class().Meta.model.objects.filter(id=pk).first()
+        if result:            
+            result_serializer = self.serializer_class(result)           
+            fileName = "." + result_serializer.data['archivo']  
+            if os.path.exists(fileName):        
+                df_info = pd.read_excel(fileName, sheet_name='INFO', skiprows=4, usecols="A:G")  
+                result1 = df_info.to_json(orient="records")
+                parsed1 = loads(result1)
+
+                df_ofer_diar = pd.read_excel(fileName, sheet_name='OFERTA TOTAL DIARIA (m3s-1)')#OFERTA TOTAL DIARIA (m3s-1)
+                df_ofer_diar['fecha'] = df_ofer_diar['fecha'].astype(str)
+                df_ofer_diar = df_ofer_diar.reset_index(drop=True).set_index('fecha')                
+                result2 = df_ofer_diar.to_json(orient="split")
+                parsed2 = loads(result2)                
+
+                df_ofer_mens = pd.read_excel(fileName, sheet_name='OFERTA TOTAL DIARIA (m3s-1)')#OFERTA TOTAL MENSUAL (m3s-1)
+                df_ofer_mens['fecha'] = df_ofer_mens['fecha'].astype(str)
+                dfQstemp = df_ofer_mens.copy(deep=True)
+                dfQstemp['Mes'] = pd.DatetimeIndex(dfQstemp['fecha']).month 
+                dfQstemp['Mes_n'] = pd.DatetimeIndex(dfQstemp['fecha']).month_name()
+                df_ofer_mens = df_ofer_mens.reset_index(drop=True).set_index('fecha') 
+                dfQstemp = dfQstemp.reset_index(drop=True).set_index('fecha')                 
+                #result3 = df_ofer_mens.to_json(orient="split")
+                #parsed2 = loads(result3)    
+
+                data4 = []             
+                for item in range(len(df_ofer_mens.columns)):                    
+                    Qm_mes = dfQstemp.groupby('Mes_n')[dfQstemp.columns[item]].mean()
+                    Qq5 = dfQstemp.groupby('Mes_n')[dfQstemp.columns[item]].quantile(0.05)
+                    Qq10 = dfQstemp.groupby('Mes_n')[dfQstemp.columns[item]].quantile(0.10)
+                    Qq15 = dfQstemp.groupby('Mes_n')[dfQstemp.columns[item]].quantile(0.15)
+                    Qq20 = dfQstemp.groupby('Mes_n')[dfQstemp.columns[item]].quantile(0.20)
+                    Qq25 = dfQstemp.groupby('Mes_n')[dfQstemp.columns[item]].quantile(0.25)
+                    Qq30 = dfQstemp.groupby('Mes_n')[dfQstemp.columns[item]].quantile(0.30)
+                    Qq35 = dfQstemp.groupby('Mes_n')[dfQstemp.columns[item]].quantile(0.35)
+                    Qq40 = dfQstemp.groupby('Mes_n')[dfQstemp.columns[item]].quantile(0.40)
+                    Qq45 = dfQstemp.groupby('Mes_n')[dfQstemp.columns[item]].quantile(0.45)
+                    Qq50 = dfQstemp.groupby('Mes_n')[dfQstemp.columns[item]].quantile(0.50)#mediana
+                    Qq55 = dfQstemp.groupby('Mes_n')[dfQstemp.columns[item]].quantile(0.55)
+                    Qq60 = dfQstemp.groupby('Mes_n')[dfQstemp.columns[item]].quantile(0.60)
+                    Qq65 = dfQstemp.groupby('Mes_n')[dfQstemp.columns[item]].quantile(0.65)
+                    Qq70 = dfQstemp.groupby('Mes_n')[dfQstemp.columns[item]].quantile(0.70)
+                    Qq75 = dfQstemp.groupby('Mes_n')[dfQstemp.columns[item]].quantile(0.75)
+                    Qq80 = dfQstemp.groupby('Mes_n')[dfQstemp.columns[item]].quantile(0.80)
+                    Qq85 = dfQstemp.groupby('Mes_n')[dfQstemp.columns[item]].quantile(0.85)
+                    Qq90 = dfQstemp.groupby('Mes_n')[dfQstemp.columns[item]].quantile(0.90)
+                    Qq95 = dfQstemp.groupby('Mes_n')[dfQstemp.columns[item]].quantile(0.95)
+                    
+                    Qm_mes.rename(index={'April':'Abr','August':'Ago','March':'Mar','December':'Dic','February':'Feb','January':'Ene','July':'Jul','June':'Jun','November':'Nov','October':'Oct','September':'Sep'},inplace=True)
+                    Qq5.rename(index={'April':'Abr','August':'Ago','March':'Mar','December':'Dic','February':'Feb','January':'Ene','July':'Jul','June':'Jun','November':'Nov','October':'Oct','September':'Sep'},inplace=True)
+                    Qq10.rename(index={'April':'Abr','August':'Ago','March':'Mar','December':'Dic','February':'Feb','January':'Ene','July':'Jul','June':'Jun','November':'Nov','October':'Oct','September':'Sep'},inplace=True)
+                    Qq15.rename(index={'April':'Abr','August':'Ago','March':'Mar','December':'Dic','February':'Feb','January':'Ene','July':'Jul','June':'Jun','November':'Nov','October':'Oct','September':'Sep'},inplace=True)
+                    Qq20.rename(index={'April':'Abr','August':'Ago','March':'Mar','December':'Dic','February':'Feb','January':'Ene','July':'Jul','June':'Jun','November':'Nov','October':'Oct','September':'Sep'},inplace=True)
+                    Qq25.rename(index={'April':'Abr','August':'Ago','March':'Mar','December':'Dic','February':'Feb','January':'Ene','July':'Jul','June':'Jun','November':'Nov','October':'Oct','September':'Sep'},inplace=True)
+                    Qq30.rename(index={'April':'Abr','August':'Ago','March':'Mar','December':'Dic','February':'Feb','January':'Ene','July':'Jul','June':'Jun','November':'Nov','October':'Oct','September':'Sep'},inplace=True)
+                    Qq35.rename(index={'April':'Abr','August':'Ago','March':'Mar','December':'Dic','February':'Feb','January':'Ene','July':'Jul','June':'Jun','November':'Nov','October':'Oct','September':'Sep'},inplace=True)
+                    Qq40.rename(index={'April':'Abr','August':'Ago','March':'Mar','December':'Dic','February':'Feb','January':'Ene','July':'Jul','June':'Jun','November':'Nov','October':'Oct','September':'Sep'},inplace=True)
+                    Qq45.rename(index={'April':'Abr','August':'Ago','March':'Mar','December':'Dic','February':'Feb','January':'Ene','July':'Jul','June':'Jun','November':'Nov','October':'Oct','September':'Sep'},inplace=True)
+                    Qq50.rename(index={'April':'Abr','August':'Ago','March':'Mar','December':'Dic','February':'Feb','January':'Ene','July':'Jul','June':'Jun','November':'Nov','October':'Oct','September':'Sep'},inplace=True)#mediana
+                    Qq55.rename(index={'April':'Abr','August':'Ago','March':'Mar','December':'Dic','February':'Feb','January':'Ene','July':'Jul','June':'Jun','November':'Nov','October':'Oct','September':'Sep'},inplace=True)
+                    Qq60.rename(index={'April':'Abr','August':'Ago','March':'Mar','December':'Dic','February':'Feb','January':'Ene','July':'Jul','June':'Jun','November':'Nov','October':'Oct','September':'Sep'},inplace=True)
+                    Qq65.rename(index={'April':'Abr','August':'Ago','March':'Mar','December':'Dic','February':'Feb','January':'Ene','July':'Jul','June':'Jun','November':'Nov','October':'Oct','September':'Sep'},inplace=True)
+                    Qq70.rename(index={'April':'Abr','August':'Ago','March':'Mar','December':'Dic','February':'Feb','January':'Ene','July':'Jul','June':'Jun','November':'Nov','October':'Oct','September':'Sep'},inplace=True)
+                    Qq75.rename(index={'April':'Abr','August':'Ago','March':'Mar','December':'Dic','February':'Feb','January':'Ene','July':'Jul','June':'Jun','November':'Nov','October':'Oct','September':'Sep'},inplace=True)
+                    Qq80.rename(index={'April':'Abr','August':'Ago','March':'Mar','December':'Dic','February':'Feb','January':'Ene','July':'Jul','June':'Jun','November':'Nov','October':'Oct','September':'Sep'},inplace=True)
+                    Qq85.rename(index={'April':'Abr','August':'Ago','March':'Mar','December':'Dic','February':'Feb','January':'Ene','July':'Jul','June':'Jun','November':'Nov','October':'Oct','September':'Sep'},inplace=True)
+                    Qq90.rename(index={'April':'Abr','August':'Ago','March':'Mar','December':'Dic','February':'Feb','January':'Ene','July':'Jul','June':'Jun','November':'Nov','October':'Oct','September':'Sep'},inplace=True)
+                    Qq95.rename(index={'April':'Abr','August':'Ago','March':'Mar','December':'Dic','February':'Feb','January':'Ene','July':'Jul','June':'Jun','November':'Nov','October':'Oct','September':'Sep'},inplace=True)
+                    
+                    new_order = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']
+                    Qm_mes = Qm_mes.reindex(new_order, axis=0)
+                    Qq5 = Qq5.reindex(new_order, axis=0)
+                    Qq10 = Qq10.reindex(new_order, axis=0)
+                    Qq15 = Qq15.reindex(new_order, axis=0)
+                    Qq20 = Qq20.reindex(new_order, axis=0)
+                    Qq25 = Qq25.reindex(new_order, axis=0)
+                    Qq30 = Qq30.reindex(new_order, axis=0)
+                    Qq35 = Qq35.reindex(new_order, axis=0)
+                    Qq40 = Qq40.reindex(new_order, axis=0)
+                    Qq45 = Qq45.reindex(new_order, axis=0)
+                    Qq50 = Qq50.reindex(new_order, axis=0)#mediana
+                    Qq55 = Qq55.reindex(new_order, axis=0)
+                    Qq60 = Qq60.reindex(new_order, axis=0)
+                    Qq65 = Qq65.reindex(new_order, axis=0)
+                    Qq70 = Qq70.reindex(new_order, axis=0)
+                    Qq75 = Qq75.reindex(new_order, axis=0)
+                    Qq80 = Qq80.reindex(new_order, axis=0)
+                    Qq85 = Qq85.reindex(new_order, axis=0)
+                    Qq90 = Qq90.reindex(new_order, axis=0)
+                    Qq95 = Qq95.reindex(new_order, axis=0)
+
+                    data4.append({"index":new_order, "data4": {"Qm_mes":Qm_mes, "Qq5":Qq5, "Qq10":Qq10, "Qq15":Qq15, "Qq20":Qq20, "Qq25":Qq25, "Qq30":Qq30, "Qq35":Qq35, "Qq40":Qq40, "Qq45":Qq45, "Qq50":Qq50, "Qq55":Qq55, "Qq60":Qq60, "Qq65":Qq65, "Qq70":Qq70, "Qq75":Qq75, "Qq80":Qq80, "Qq85":Qq85, "Qq90":Qq90, "Qq95":Qq95}})
+                    
+
+
+            
+        return Response({'data1': parsed1, 'data3':parsed2, 'data4': data4}, status=status.HTTP_201_CREATED)        

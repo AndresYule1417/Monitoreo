@@ -1,8 +1,9 @@
-import { Component, OnInit, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { Chart, registerables } from 'chart.js'
 import annotationPlugin from 'chartjs-plugin-annotation';
+
 Chart.register(...registerables)
 Chart.register(annotationPlugin);
 
@@ -11,9 +12,12 @@ import { CrudService } from '../crud.service';
 @Component({
   selector: 'app-view-project',
   templateUrl: './view-project.component.html',
-  styleUrl: './view-project.component.scss'
+  styleUrl: './view-project.component.scss',
+  //encapsulation: ViewEncapsulation.ShadowDom,
 })
 export class ViewProjectComponent implements OnInit, AfterViewInit {
+
+  //@ViewChild('space_ohts') space_ohts!: ElementRef;
 
   data: any = {
     id: "",
@@ -23,19 +27,118 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
   }; 
 
   space: any;
+  space_ohts: any;
   
   constructor(private elementRef:ElementRef, private service:CrudService, private activatedRoute:ActivatedRoute){}
 
-  ngAfterViewInit(): void {
-    /*this.space = this.elementRef.nativeElement.querySelector('#space');    
-    const id = this.activatedRoute.snapshot.paramMap.get('id');      
-    this.getProject(id!);*/         
+  ngAfterViewInit(): void {    
   }
 
-  ngOnInit(): void {
-    this.space = this.elementRef.nativeElement.querySelector('#space');    
+  ngOnInit(): void {    
+    this.space = this.elementRef.nativeElement.querySelector('#space');
+    this.space_ohts = this.elementRef.nativeElement.querySelector('#space_ohts');     
+    
     const id = this.activatedRoute.snapshot.paramMap.get('id');      
-    this.getProject(id!);   
+    //this.getProject(id!); 
+    this.getProject_OHTS(id!);   
+  }
+
+  async getProject_OHTS(id:string){
+    const prueba = await this.service.retrieve_ohts(id);
+    prueba.subscribe({
+      next: (result:any) =>{
+        console.log(result);        
+        for(let i=0; i<result.data1.length; i++){
+          const area1 = document.createElement("div");
+          area1.setAttribute("id", "area1_" + i);          
+          area1.style.display = "flex";         
+          area1.style.flexWrap = "wrap"; 
+          area1.style.width = "100%";          
+          area1.style.border = "solid 1px";
+          this.space_ohts?.appendChild(area1);
+
+          const area1_e1 = document.createElement("div");               
+          area1_e1.style.border = "solid 1px";          
+          var myHTML = "<h3 style='margin-left:16px; margin-right:16px;'>Oferta Hídrica Total Superficial (OHTS)</h3>";
+          myHTML += "<div style='background-color:rgba(64, 224, 208, 0.3); border:solid 1px #abb2b9; margin-left:32px; margin-right:32px; border-radius:8px; padding:8px; max-width:300px;'>"
+          myHTML +=   "<p style='margin:0 auto;'><strong>Subzona Hidrográfica: </strong></p>";
+          myHTML +=   "<p style='margin:0 auto;'><strong>Unidad de Análisis: </strong>" + result.data1[i]['Unidad de analisis'].replaceAll("_", " ") + "</p>";
+          myHTML +=   "<p style='margin:0 auto;'><strong>Punto Cierre en Modelo (CTM12): </strong></p>"
+          myHTML +=   "<p style='margin:0 auto;'>X: " + result.data1[i]['coord_x'] + "m Y:" + result.data1[i]['coord_y'] + "m" + "</p>";
+          myHTML += "</div>";
+          myHTML += "<br>";
+          myHTML += "<div style='background-color:rgba(144, 238, 144, 0.3); border:solid 1px #abb2b9; border-radius:8px; margin-left:32px; margin-right:32px; padding:8px; max-width:400px;'>";
+          myHTML +=   "<p style='margin:0 auto;'><strong>Descripción: </strong></p>";
+          myHTML +=   "<p style='margin:0 auto;'>" + result.data1[i]['desc_info'] + "</p>";
+          myHTML += "</div>";
+          area1_e1.innerHTML =  myHTML          
+
+          //**********Area Para Mapa**********
+          const area1_e2 = document.createElement("div");          
+          area1_e2.style.border = "solid 1px";
+          //**********************************
+
+          const get_area1 = document.getElementById("area1_" + i);
+          get_area1?.appendChild(area1_e1);
+          get_area1?.appendChild(area1_e2);
+
+          const area2 = document.createElement("div");
+          area2.style.border = "solid 1px";
+          area2.style.height = "80px";
+          this.space_ohts?.appendChild(area2);
+
+          //********************Area 3********************
+          const area3 = document.createElement("div");
+          area3.setAttribute("id", "area3_" + i); 
+          /*area3.style.border = "solid 1px";
+          area3.style.display = "flex";         
+          area3.style.flexWrap = "wrap";*/          
+          this.space_ohts?.appendChild(area3);
+
+          const area3_e1 = document.createElement("div");
+          /*rea3_e1.style.width = "400px";
+          const canvas3 = document.createElement("canvas");
+          canvas3.setAttribute("id", "canvas3_" + i); 
+          area3_e1.appendChild(canvas3);
+          this.renderLine(result.data4[i]['index'], result.data4[i]['data4'], "canvas3_" + i, 'Rendimiento Hídrico Mensual Año Humedo');*/
+
+
+          const area3_e2 = document.createElement("div");
+
+
+          //const get_area3 = document.getElementById("area3_" + i);
+          //get_area3?.appendChild(area3_e1);
+          //get_area3?.appendChild(area3_e2);
+
+          /*const canvas1 = document.createElement("canvas");
+          canvas1.setAttribute("id", "pmdc_"+i);           
+          canvas1.style.width = "400px"   
+          this.space_ohts.appendChild(canvas1);
+          this.renderLine(result.data4[i]['index'], result.data4[i]['data4'], "pmdc_" + i, 'Rendimiento Hídrico Mensual Año Humedo');*/
+
+          const get_area3 = document.getElementById("area3_" + i);
+          const canvas1 = document.createElement("canvas");
+          canvas1.setAttribute("id", "pmdc_"+i);           
+          canvas1.style.width = "400px"          
+          get_area3?.appendChild(canvas1);          
+          this.renderLine(result.data4[i]['index'], result.data4[i]['data4'], "pmdc_" + i, 'Rendimiento Hídrico Mensual Año Humedo');
+
+          get_area3?.appendChild(area3_e1);
+          get_area3?.appendChild(area3_e2);
+
+          
+          
+
+
+
+
+
+
+          
+        }
+      }
+    });
+
   }
 
   async getProject(id:string){
@@ -173,6 +276,171 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
           });*/
         }
       }
+    });
+  }
+
+  renderLine(index:any, data4:any, id:any, titulo:any){    
+    const canvas = <HTMLCanvasElement> document.getElementById(id);
+    const ctx = canvas.getContext('2d');
+    const lineChart = new Chart(ctx!, {
+      type: 'line',  
+      
+      data: {
+        labels: index,
+        datasets: [{
+          label: 'Qq5',
+          data: data4['Qq5'],
+          fill: '+1',
+          borderColor: 'rgba(0, 0, 255, 0.1)',
+          backgroundColor: 'rgba(0, 0, 255, 0.1)',
+          tension: 0.1
+          //pointRadius: 0,
+        },{
+          label: 'Qq10',
+          data: data4['Qq10'],
+          fill: '+1',
+          borderColor: 'rgba(0, 0, 255, 0.2)',
+          backgroundColor: 'rgba(0, 0, 255, 0.2)',
+          tension: 0.1
+        },{
+          label: 'Qq15',
+          data: data4['Qq15'],
+          fill: '+1',
+          borderColor: 'rgba(0, 0, 255, 0.3)',
+          backgroundColor: 'rgba(0, 0, 255, 0.3)',
+          tension: 0.1
+        },{
+          label: 'Qq20',
+          data: data4['Qq20'],
+          fill: '+1',
+          borderColor: 'rgba(0, 0, 255, 0.4)',
+          backgroundColor: 'rgba(0, 0, 255, 0.4)',
+          tension: 0.1
+        },{
+          label: 'Qq25',
+          data: data4['Qq25'],
+          fill: '+1',
+          borderColor: 'rgba(0, 0, 255, 0.5)',
+          backgroundColor: 'rgba(0, 0, 255, 0.5)',
+          tension: 0.1,          
+        },{
+          label: 'Qq30',
+          data: data4['Qq30'],
+          fill: '+1',
+          borderColor: 'rgba(0, 0, 255, 0.6)',
+          backgroundColor: 'rgba(0, 0, 255, 0.6)',
+          tension: 0.1,          
+        },{
+          label: 'Qq35',
+          data: data4['Qq35'],
+          fill: '+1',
+          borderColor: 'rgba(0, 0, 255, 0.7)',
+          backgroundColor: 'rgba(0, 0, 255, 0.7)',
+          tension: 0.1,          
+        },{
+          label: 'Qq40',
+          data: data4['Qq40'],
+          fill: '+1',
+          borderColor: 'rgba(0, 0, 255, 0.8)',
+          backgroundColor: 'rgba(0, 0, 255, 0.8)',
+          tension: 0.1,          
+        },{
+          label: 'Qq45',
+          data: data4['Qq45'],
+          fill: '+1',
+          borderColor: 'rgba(0, 0, 255, 0.9)',
+          backgroundColor: 'rgba(0, 0, 255, 0.9)',
+          tension: 0.1,          
+        },{
+          label: 'MEDIANA',
+          data: data4['Qq50'],
+          fill: '+1',//false
+          borderColor: 'rgb(0, 0, 0)',
+          backgroundColor: 'rgb(0, 0, 255)',
+          tension: 0.1,             
+        },{
+          label: 'MEDIA',//*****
+          data: data4['Qm_mes'],   
+          borderWidth: 4,     
+          fill: false,
+          borderColor: 'rgb(255, 140, 0)',          
+          backgroundColor: 'rgb(0, 0, 255)',
+          
+          tension: 0.1,      
+          pointHoverRadius: 6,  
+          
+        },{          
+          label: 'Qq55',
+          data: data4['Qq55'],        
+          fill: '-1',
+          borderColor: 'rgba(0, 0, 255, 0.9)',
+          backgroundColor: 'rgba(0, 0, 255, 0.9)',
+          tension: 0.1,          
+        },{        
+          label: 'Qq60',  
+          data: data4['Qq60'],        
+          fill: '-1',
+          borderColor: 'rgba(0, 0, 255, 0.8)',
+          backgroundColor: 'rgba(0, 0, 255, 0.8)',
+          tension: 0.1,          
+        },{
+          label: 'Qq65',
+          data: data4['Qq65'],        
+          fill: '-1',
+          borderColor: 'rgba(0, 0, 255, 0.7)',
+          backgroundColor: 'rgba(0, 0, 255, 0.7)',
+          tension: 0.1,          
+        },{
+          label: 'Qq70',
+          data: data4['Qq70'],        
+          fill: '-1',
+          borderColor: 'rgba(0, 0, 255, 0.6)',
+          backgroundColor: 'rgba(0, 0, 255, 0.6)',
+          tension: 0.1,          
+        },{
+          label: 'Qq75',
+          data: data4['Qq75'],        
+          fill: '-1',
+          borderColor: 'rgba(0, 0, 255, 0.5)',
+          backgroundColor: 'rgba(0, 0, 255, 0.5)',
+          tension: 0.1,          
+        },{
+          label: 'Qq80',
+          data: data4['Qq80'],        
+          fill: '-1',
+          borderColor: 'rgba(0, 0, 255, 0.4)',
+          backgroundColor: 'rgba(0, 0, 255, 0.4)',
+          tension: 0.1,          
+        },{
+          label: 'Qq85',
+          data: data4['Qq85'],        
+          fill: '-1',
+          borderColor: 'rgba(0, 0, 255, 0.3)',
+          backgroundColor: 'rgba(0, 0, 255, 0.3)',
+          tension: 0.1,          
+        },{
+          label: 'Qq90',
+          data: data4['Qq90'],        
+          fill: '-1',
+          borderColor: 'rgba(0, 0, 255, 0.2)',
+          backgroundColor: 'rgba(0, 0, 255, 0.2)',
+          tension: 0.1,          
+        },{
+          label: 'Qq95',
+          data: data4['Qq95'],        
+          fill: '-1',
+          borderColor: 'rgba(0, 0, 255, 0.1)',
+          backgroundColor: 'rgba(0, 0, 255, 0.1)',
+          tension: 0.1,          
+        }] 
+      }, 
+      options: {
+        plugins: {
+           legend: {
+              display: false
+           }
+        }
+      }    
     });
   }
 

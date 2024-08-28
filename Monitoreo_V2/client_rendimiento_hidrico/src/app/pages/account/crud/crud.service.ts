@@ -46,5 +46,12 @@ export class CrudService {
     return this.http.get(`${environment.API_URL}/proyectos/${id}`, {headers});
   }
 
+  async retrieve_ohts(id:string){
+    const headers  = { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('user') || '{}').token + ''};
+    return this.http.get(`${environment.API_URL}/proyectos/${id}/retrieve_ohts`, {headers});
+  }
+
+
+
 
 }

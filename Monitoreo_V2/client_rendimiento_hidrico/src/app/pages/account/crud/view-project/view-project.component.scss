@@ -1,7 +1,8 @@
 .container {
     max-width: 800px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 20px;    
+    
 }
 
 /* Encabezado */
@@ -84,3 +85,11 @@ h1 {
 .active, .accordion:hover {
     background-color: #ccc;
 }
+
+.colorBox{
+    display: flex;         
+    flex-wrap: wrap;
+    width: 100%;          
+    border: solid 1px;    
+}
+
