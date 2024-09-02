@@ -21,10 +21,12 @@ export class StartComponent implements OnInit {
 
   //funcion que se ejecuta despues del constructor
   //verifica si el usuario esta logeado
-  ngOnInit(): void {     
-    this.service.checkToken().subscribe(result => {      
-      this.router.navigate(['/account']);
-      return false;
+  ngOnInit(): void {    
+    this.service.checkToken().subscribe({      
+      next: (result)=>{
+        this.router.navigate(['/account']);
+        return false;
+      }
     });
     
     //funcion que cambia la inclinacion de imagen cuando el mouse esta encima 

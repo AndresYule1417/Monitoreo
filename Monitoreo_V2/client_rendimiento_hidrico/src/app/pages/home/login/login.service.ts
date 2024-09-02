@@ -50,9 +50,7 @@ export class LoginService {
   //funcion que realiza peticion post paa verificar token activo
   checkToken(){           
     var data = this.getToken()
-    return this.http.post(`${environment.API_URL}/api/token/verify/`, data).pipe(map(result => {      
-      return true;
-    }), catchError((error) => this.handlerError(error)));              
+    return this.http.post(`${environment.API_URL}/api/token/verify/`, data);
   }
 
   //funcion que retorna el token guardado

@@ -94,19 +94,18 @@ class ProyectosViewSet(viewsets.GenericViewSet):
 
                 df_ofer_diar = pd.read_excel(fileName, sheet_name='OFERTA TOTAL DIARIA (m3s-1)')#OFERTA TOTAL DIARIA (m3s-1)
                 df_ofer_diar['fecha'] = df_ofer_diar['fecha'].astype(str)
-                df_ofer_diar = df_ofer_diar.reset_index(drop=True).set_index('fecha')                
-                result2 = df_ofer_diar.to_json(orient="split")
-                parsed2 = loads(result2)                
+                df_ofer_diar = df_ofer_diar.reset_index(drop=True).set_index('fecha')    
+                df_ofer_diar = df_ofer_diar.T#comentar           
+                result3 = df_ofer_diar.to_json(orient="split")
+                parsed3 = loads(result3)                
 
-                df_ofer_mens = pd.read_excel(fileName, sheet_name='OFERTA TOTAL DIARIA (m3s-1)')#OFERTA TOTAL MENSUAL (m3s-1)
+                df_ofer_mens = pd.read_excel(fileName, sheet_name='OFERTA TOTAL MENSUAL (m3s-1)')#OFERTA TOTAL MENSUAL (m3s-1)
                 df_ofer_mens['fecha'] = df_ofer_mens['fecha'].astype(str)
                 dfQstemp = df_ofer_mens.copy(deep=True)
                 dfQstemp['Mes'] = pd.DatetimeIndex(dfQstemp['fecha']).month 
                 dfQstemp['Mes_n'] = pd.DatetimeIndex(dfQstemp['fecha']).month_name()
                 df_ofer_mens = df_ofer_mens.reset_index(drop=True).set_index('fecha') 
-                dfQstemp = dfQstemp.reset_index(drop=True).set_index('fecha')                 
-                #result3 = df_ofer_mens.to_json(orient="split")
-                #parsed2 = loads(result3)    
+                dfQstemp = dfQstemp.reset_index(drop=True).set_index('fecha')               
 
                 data4 = []             
                 for item in range(len(df_ofer_mens.columns)):                    
@@ -175,8 +174,5 @@ class ProyectosViewSet(viewsets.GenericViewSet):
                     Qq95 = Qq95.reindex(new_order, axis=0)
 
                     data4.append({"index":new_order, "data4": {"Qm_mes":Qm_mes, "Qq5":Qq5, "Qq10":Qq10, "Qq15":Qq15, "Qq20":Qq20, "Qq25":Qq25, "Qq30":Qq30, "Qq35":Qq35, "Qq40":Qq40, "Qq45":Qq45, "Qq50":Qq50, "Qq55":Qq55, "Qq60":Qq60, "Qq65":Qq65, "Qq70":Qq70, "Qq75":Qq75, "Qq80":Qq80, "Qq85":Qq85, "Qq90":Qq90, "Qq95":Qq95}})
-                    
-
-
-            
-        return Response({'data1': parsed1, 'data3':parsed2, 'data4': data4}, status=status.HTTP_201_CREATED)        
+                
+        return Response({'data1': parsed1, 'data3':parsed3, 'data4': data4}, status=status.HTTP_201_CREATED)        

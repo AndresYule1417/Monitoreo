@@ -40,9 +40,11 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
     this.input = this.elementRef.nativeElement.querySelector('#input'); 
     this.input1 = this.elementRef.nativeElement.querySelector('#input1'); 
-    this.service.checkToken().subscribe(result => {      
-      this.router.navigate(['/account']);
-      return false;
+    this.service.checkToken().subscribe({      
+      next: (result)=>{
+        this.router.navigate(['/account']);
+        return false;
+      }
     });
   }
 

@@ -47,7 +47,8 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
     const prueba = await this.service.retrieve_ohts(id);
     prueba.subscribe({
       next: (result:any) =>{
-        console.log(result);        
+        console.log(result.data3);       
+        console.log(result.data3.data[0]);      
         for(let i=0; i<result.data1.length; i++){
           const area1 = document.createElement("div");
           area1.setAttribute("id", "area1_" + i);          
@@ -82,63 +83,43 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
           get_area1?.appendChild(area1_e1);
           get_area1?.appendChild(area1_e2);
 
+          //********************Area 2********************
           const area2 = document.createElement("div");
-          area2.style.border = "solid 1px";
-          area2.style.height = "80px";
+          area2.style.border = "solid 1px";          
+          const canvas2 = document.createElement("canvas");
+          canvas2.setAttribute("id", "canvas2_" + i); 
+          area2.appendChild(canvas2);
           this.space_ohts?.appendChild(area2);
+          this.renderArea2(result.data3.columns, result.data3.data[i], "canvas2_" + i, 'Rendimiento Hídrico Mensual Año Humedo');          
+          //**********************************************
 
           //********************Area 3********************
           const area3 = document.createElement("div");
-          area3.setAttribute("id", "area3_" + i); 
-          /*area3.style.border = "solid 1px";
+          //area3.setAttribute("id", "area3_" + i); 
+          area3.style.border = "solid 1px red";
           area3.style.display = "flex";         
-          area3.style.flexWrap = "wrap";*/          
+          area3.style.flexWrap = "wrap";          
           this.space_ohts?.appendChild(area3);
 
           const area3_e1 = document.createElement("div");
-          /*rea3_e1.style.width = "400px";
-          const canvas3 = document.createElement("canvas");
-          canvas3.setAttribute("id", "canvas3_" + i); 
-          area3_e1.appendChild(canvas3);
-          this.renderLine(result.data4[i]['index'], result.data4[i]['data4'], "canvas3_" + i, 'Rendimiento Hídrico Mensual Año Humedo');*/
-
+          area3_e1.style.width = "50%";
+          area3_e1.style.border = "solid 1px";
+          const canvas3_e1 = document.createElement("canvas");
+          canvas3_e1.setAttribute("id", "canvas3_" + i); 
+          area3_e1.appendChild(canvas3_e1);          
 
           const area3_e2 = document.createElement("div");
+          area3_e2.style.width = "50%";
+          area3_e2.style.border = "solid 1px";
 
+          area3?.appendChild(area3_e1);
+          area3?.appendChild(area3_e2);
 
-          //const get_area3 = document.getElementById("area3_" + i);
-          //get_area3?.appendChild(area3_e1);
-          //get_area3?.appendChild(area3_e2);
-
-          /*const canvas1 = document.createElement("canvas");
-          canvas1.setAttribute("id", "pmdc_"+i);           
-          canvas1.style.width = "400px"   
-          this.space_ohts.appendChild(canvas1);
-          this.renderLine(result.data4[i]['index'], result.data4[i]['data4'], "pmdc_" + i, 'Rendimiento Hídrico Mensual Año Humedo');*/
-
-          const get_area3 = document.getElementById("area3_" + i);
-          const canvas1 = document.createElement("canvas");
-          canvas1.setAttribute("id", "pmdc_"+i);           
-          canvas1.style.width = "400px"          
-          get_area3?.appendChild(canvas1);          
-          this.renderLine(result.data4[i]['index'], result.data4[i]['data4'], "pmdc_" + i, 'Rendimiento Hídrico Mensual Año Humedo');
-
-          get_area3?.appendChild(area3_e1);
-          get_area3?.appendChild(area3_e2);
-
-          
-          
-
-
-
-
-
-
+          this.renderLine(result.data4[i]['index'], result.data4[i]['data4'], "canvas3_" + i, 'Rendimiento Hídrico Mensual Año Humedo');
           
         }
       }
     });
-
   }
 
   async getProject(id:string){
@@ -279,14 +260,39 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
     });
   }
 
-  renderLine(index:any, data4:any, id:any, titulo:any){    
-    const canvas = <HTMLCanvasElement> document.getElementById(id);
+  renderArea2(columns:any, data3:any, id:any, titulo:any){    
+    const canvas = <HTMLCanvasElement> document.getElementById(id);    
     const ctx = canvas.getContext('2d');
     const lineChart = new Chart(ctx!, {
-      type: 'line',  
-      
+      type: 'line',        
       data: {
-        labels: index,
+        labels: columns,
+        datasets: [{
+          label: 'Qq5',
+          data: data3,
+          fill: false,
+          borderColor: 'rgba(0, 0, 255, 1.0)',
+          backgroundColor: 'rgba(0, 0, 255, 1.0)',
+          tension: 0.1          
+        }] 
+      }, 
+      options: {
+        plugins: {
+           legend: {
+              display: false
+           }
+        }
+      }    
+    });
+  }
+
+  renderLine(columns:any, data4:any, id:any, titulo:any){         
+    const canvas = <HTMLCanvasElement> document.getElementById(id);    
+    const ctx = canvas.getContext('2d');
+    const lineChart = new Chart(ctx!, {
+      type: 'line',        
+      data: {
+        labels: columns,
         datasets: [{
           label: 'Qq5',
           data: data4['Qq5'],
