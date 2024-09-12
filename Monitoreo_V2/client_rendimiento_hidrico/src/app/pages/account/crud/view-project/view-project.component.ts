@@ -47,8 +47,11 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
     const prueba = await this.service.retrieve_ohts(id);
     prueba.subscribe({
       next: (result:any) =>{
-        console.log(result.data3);       
-        console.log(result.data3.data[0]);      
+        //console.log(result.data3);       
+        //console.log(result.data3.data[0]);      
+        //console.log(result.data5); 
+        //console.log(result.data6); 
+        console.log(result); 
         for(let i=0; i<result.data1.length; i++){
           const area1 = document.createElement("div");
           area1.setAttribute("id", "area1_" + i);          
@@ -97,26 +100,139 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
           const area3 = document.createElement("div");
           //area3.setAttribute("id", "area3_" + i); 
           area3.style.border = "solid 1px red";
+          area3.style.height = "320px";
           area3.style.display = "flex";         
           area3.style.flexWrap = "wrap";          
           this.space_ohts?.appendChild(area3);
 
           const area3_e1 = document.createElement("div");
-          area3_e1.style.width = "50%";
+          area3_e1.style.width = "50%";          
           area3_e1.style.border = "solid 1px";
+          area3_e1.style.display = "flex";
+          const area3_e1_d1 = document.createElement("div");
+          area3_e1_d1.style.width = "13%";                   
+          area3_e1_d1.innerHTML = "<p style='position:relative; writing-mode:tb-rl; transform:rotate(-180deg); top:25%;'>Caudal (m3/s)</p>";
+          const area3_e1_d2 = document.createElement("div");
+          area3_e1_d2.style.width = "87%";
           const canvas3_e1 = document.createElement("canvas");
           canvas3_e1.setAttribute("id", "canvas3_" + i); 
-          area3_e1.appendChild(canvas3_e1);          
+          area3_e1_d2.appendChild(canvas3_e1);       
+
+          area3_e1.appendChild(area3_e1_d1);
+          area3_e1.appendChild(area3_e1_d2);          
 
           const area3_e2 = document.createElement("div");
           area3_e2.style.width = "50%";
           area3_e2.style.border = "solid 1px";
+          area3_e2.style.display = "flex";   
+          const area3_e2_d1 = document.createElement("div"); 
+          area3_e2_d1.style.width = "13%";                   
+          area3_e2_d1.innerHTML = "<p style='position:relative; writing-mode:tb-rl; transform:rotate(-180deg); top:25%;'>Escorrentia (mm)</p>";
+          const area3_e2_d2 = document.createElement("div"); 
+          area3_e2_d2.style.width = "87%"; 
+          area3_e2?.appendChild(area3_e2_d1);
+          area3_e2?.appendChild(area3_e2_d2);
+          const canvas5 = document.createElement("canvas");
+          canvas5.setAttribute("id", "escom_"+i);                                                    
+          area3_e2_d2.appendChild(canvas5)         
+          var categorias = result.data5.columns; 
+          var valores = result.data5.data[i]; 
+          var promedio = valores.reduce((acc:any, curr:any) => acc + curr, 0) / valores.length;
+
+          //********************Area 4********************
+          const area4 = document.createElement("div");
+          area4.style.height = "320px";
+          area4.style.border = "solid 1px red";
+          area4.style.display = "flex";         
+          area4.style.flexWrap = "wrap";          
+          this.space_ohts?.appendChild(area4);
+
+          const area4_e1 = document.createElement("div");
+          area4_e1.style.width = "50%";
+          area4_e1.style.border = "solid 1px";
+          area4_e1.style.display = "flex";
+          const area4_e1_d1 = document.createElement("div"); 
+          area4_e1_d1.style.width = "13%";                   
+          area4_e1_d1.innerHTML = "<p style='position:relative; writing-mode:tb-rl; transform:rotate(-180deg); top:25%;'>Escorrentia (mm)</p>";
+          const area4_e1_d2 = document.createElement("div"); 
+          area4_e1_d2.style.width = "87%"; 
+          area4_e1?.appendChild(area4_e1_d1);
+          area4_e1?.appendChild(area4_e1_d2);
+          const canvas6 = document.createElement("canvas");
+          canvas6.setAttribute("id", "escoh_"+i);                                                    
+          area4_e1_d2.appendChild(canvas6)         
+          var categorias6 = result.data6.columns; 
+          var valores6 = result.data6.data[i]; 
+          var promedio6 = valores6.reduce((acc:any, curr:any) => acc + curr, 0) / valores6.length;
+
+          const area4_e2 = document.createElement("div");
+          area4_e2.style.width = "50%";
+          area4_e2.style.border = "solid 1px";
+          area4_e2.style.display = "flex";  
+          const area4_e2_d1 = document.createElement("div"); 
+          area4_e2_d1.style.width = "13%";                   
+          area4_e2_d1.innerHTML = "<p style='position:relative; writing-mode:tb-rl; transform:rotate(-180deg); top:25%;'>Escorrentia (mm)</p>";
+          const area4_e2_d2 = document.createElement("div"); 
+          area4_e2_d2.style.width = "87%"; 
+          area4_e2?.appendChild(area4_e2_d1);
+          area4_e2?.appendChild(area4_e2_d2);
+          const canvas7 = document.createElement("canvas");
+          canvas7.setAttribute("id", "escos_"+i);                                                    
+          area4_e2_d2.appendChild(canvas7)         
+          var categorias7 = result.data7.columns; 
+          var valores7 = result.data7.data[i]; 
+          var promedio7 = valores7.reduce((acc:any, curr:any) => acc + curr, 0) / valores7.length;          
+          
+          //********************Area 5********************
+          const area5 = document.createElement("div");
+          area5.style.display = "flex";
+          area5.style.border = "solid 1px";
+          //area5.style.height = "300px";
+          this.space_ohts?.appendChild(area5);
+
+          const area5_e1 = document.createElement("div");
+          area5_e1.style.border = "solid 1px";
+          area5_e1.style.width = "75%";
+          area5_e1.style.display = "flex";
+          area5.appendChild(area5_e1);
+          const area5_e1_d1 = document.createElement("div");
+          area5_e1_d1.style.width = "12%";  
+          area5_e1_d1.style.border = "solid 1px";                   
+          area5_e1_d1.innerHTML = "<p style='position:relative; writing-mode:tb-rl; transform:rotate(-180deg); top:25%;'>Caudal (m3/s)</p>";
+          area5_e1.appendChild(area5_e1_d1);
+          const area5_e1_d2 = document.createElement("div");
+          area5_e1_d2.style.width = "88%"; 
+          area5_e1_d2.style.border = "solid 1px"; 
+          area5_e1.appendChild(area5_e1_d2);
+          const canvas8 = document.createElement("canvas");
+          canvas8.setAttribute("id", "qamed_"+i);                                                    
+          area5_e1_d2.appendChild(canvas8)         
+          var colu_qamed = result.data8.qamed.columns; 
+          var valo_qamed = result.data8.qamed.data[i]; 
+          var valo_qamin = result.data8.qamin.data[i]; 
+          var valo_qamax = result.data8.qamax.data[i]; 
+          
+          var valo_lamed = result.data8.lamed.data[i]; 
+          var valo_lamin = result.data8.lamin.data[i]; 
+          var valo_lamax = result.data8.lamax.data[i]; 
+
+          const area5_e2 = document.createElement("div");
+          area5_e2.style.border = "solid 1px";
+          area5_e2.style.width = "25%";
+          area5.appendChild(area5_e2);
+
+          area4?.appendChild(area4_e1);
+          area4?.appendChild(area4_e2);
 
           area3?.appendChild(area3_e1);
           area3?.appendChild(area3_e2);
 
-          this.renderLine(result.data4[i]['index'], result.data4[i]['data4'], "canvas3_" + i, 'Rendimiento Hídrico Mensual Año Humedo');
-          
+          this.renderBar(categorias, valores, promedio, "escom_"+i, 'Escorrentía Mensual Año Medio' , 1);
+          this.renderBar(categorias6, valores6, promedio6, "escoh_"+i, 'Escorrentía Mensual Año Humedo', 1);
+          this.renderBar(categorias7, valores7, promedio7, "escos_"+i, 'Escorrentía Mensual Año Seco', 1);
+
+          this.renderLineTend(colu_qamed, valo_qamed, valo_qamin, valo_qamax, valo_lamed, valo_lamin, valo_lamax,  "qamed_"+i, "Tendencia de caudales");
+          this.renderLine(result.data4[i]['index'], result.data4[i]['data4'], "canvas3_" + i, 'Rendimiento Hídrico Mensual Año Humedo');          
         }
       }
     });
@@ -210,7 +326,7 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
           var categorias = result.xlsx.rham.columns; 
           var valores = result.xlsx.rham.data[i]; 
           var promedio = valores.reduce((acc:any, curr:any) => acc + curr, 0) / valores.length;
-          this.renderBar(categorias, valores, promedio, "rham_" + i, 'Rendimiento Hídrico Mensual Año Medio');    
+          this.renderBar(categorias, valores, promedio, "rham_" + i, 'Rendimiento Hídrico Mensual Año Medio', 0);    
 
           const canvas2 = document.createElement("canvas");
           canvas2.setAttribute("id", "rhah_"+i);                    
@@ -218,7 +334,7 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
           categorias = result.xlsx.rhah.columns;
           valores = result.xlsx.rhah.data[i]; 
           promedio = valores.reduce((acc:any, curr:any) => acc + curr, 0) / valores.length;
-          this.renderBar(categorias, valores, promedio, "rhah_" + i, 'Rendimiento Hídrico Mensual Año Humedo');
+          this.renderBar(categorias, valores, promedio, "rhah_" + i, 'Rendimiento Hídrico Mensual Año Humedo', 0);
 
           const canvas3 = document.createElement("canvas");
           canvas3.setAttribute("id", "rhas_"+i);                    
@@ -226,7 +342,7 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
           categorias = result.xlsx.rhas.columns; 
           valores = result.xlsx.rhas.data[i]; 
           promedio = valores.reduce((acc:any, curr:any) => acc + curr, 0) / valores.length;
-          this.renderBar(categorias, valores, promedio, "rhas_" + i, 'Rendimiento Hídrico Mensual Año Seco');
+          this.renderBar(categorias, valores, promedio, "rhas_" + i, 'Rendimiento Hídrico Mensual Año Seco', 0);
         }  
         
         var acc = document.getElementsByClassName("accordion");
@@ -283,6 +399,83 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
            }
         }
       }    
+    });
+  }
+
+  renderLineTend(columns:any, qamed:any, qamin:any, qamax:any, lamed:any, lamin:any, lamax:any, id:any, titulo:any){
+    const canvas = <HTMLCanvasElement> document.getElementById(id);    
+    const ctx = canvas.getContext('2d');
+    const lineChart = new Chart(ctx!, {
+      type: 'line',
+      data: {
+        labels: columns,
+        datasets: [{
+          label: "Q medio",
+          data: qamed,
+          fill: false,
+          borderColor: 'rgb(0, 0, 255)',
+          backgroundColor: 'rgb(255, 255, 255)',
+          tension: 0.1,         
+          borderDash: [6, 4],
+          pointRadius: 4,
+        },{
+          label: "TQ medio",
+          data: lamed,
+          fill: false,
+          borderColor: 'rgb(0, 128, 255)',
+          backgroundColor: 'rgb(255, 255, 255)',
+          tension: 0.1,         
+          borderDash: [6, 4],
+          pointRadius: 0,
+        },{
+          label: "Q min",
+          data: qamin,
+          fill: false,
+          borderColor: 'rgb(255, 0, 0)',
+          backgroundColor: 'rgb(255, 255, 255)',
+          tension: 0.1,
+          pointStyle: 'rect',
+          borderDash: [6, 4],
+          pointRadius: 4,
+        },{
+          label: "TQ min",
+          data: lamin,
+          fill: false,
+          borderColor: 'rgb(255, 128, 0)',
+          backgroundColor: 'rgb(255, 255, 255)',
+          tension: 0.1,
+          pointStyle: 'rect',
+          borderDash: [6, 4],
+          pointRadius: 0,
+        },{
+          label: "Q max",
+          data: qamax,
+          fill: false,
+          borderColor: 'rgb(0, 128, 0)',
+          backgroundColor: 'rgb(255, 255, 255)',
+          tension: 0.1,
+          pointStyle: 'triangle',
+          borderDash: [6, 4],
+          pointRadius: 5,
+        },{
+          label: "TQ max",
+          data: lamax,
+          fill: false,
+          borderColor: 'rgb(128, 128, 0)',
+          backgroundColor: 'rgb(255, 255, 255)',
+          tension: 0.1,
+          pointStyle: 'triangle',
+          borderDash: [6, 4],
+          pointRadius: 0,
+        }]
+      },
+      /*options: {
+        plugins: {
+           legend: {
+              display: false
+           },            
+        }
+      }*/  
     });
   }
 
@@ -371,10 +564,9 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
           fill: false,
           borderColor: 'rgb(255, 140, 0)',          
           backgroundColor: 'rgb(0, 0, 255)',
-          
+          borderDash: [6, 4],
           tension: 0.1,      
-          pointHoverRadius: 6,  
-          
+          pointHoverRadius: 6,            
         },{          
           label: 'Qq55',
           data: data4['Qq55'],        
@@ -450,8 +642,14 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
     });
   }
 
-  renderBar(categorias:any, valores:any, promedio:any, id:any, titulo:any){
-    const backgroundColors = valores.map((value:any) => this.getBackgroundColor(value));  
+  renderBar(categorias:any, valores:any, promedio:any, id:any, titulo:any, flag:number){
+    var backgroundColors = []
+    if(flag==0){
+      backgroundColors = valores.map((value:any) => this.getBackgroundColor(value));  
+    }else{
+      backgroundColors = valores.map((value:any) => this.getBackgroundColorEsco(value));
+    }
+    
     const canvas = <HTMLCanvasElement> document.getElementById(id);
     const ctx = canvas.getContext('2d');
     const waterLevelChart = new Chart(ctx!, {
@@ -530,6 +728,32 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
         return 'rgba(0, 90, 230)'; 
     }else {
         return 'rgba(0, 40, 115)'; 
+    }
+  };
+
+  getBackgroundColorEsco(value:any){
+    if (value <= 20) {
+        return 'rgba(255, 0, 0)'; 
+    } else if (value<=40 && value>20) {
+        return 'rgba(255, 80, 0)'; 
+    } else if (value<=60 && value>40) {
+        return 'rgba(255, 120, 0)'; 
+    }else if (value<=80 && value>60) {
+        return 'rgba(255, 255, 0)'; 
+    }else if (value<=100 && value>80) {
+        return 'rgba(160, 255, 115)'; 
+    }else if (value<=150 && value>100) {
+        return 'rgba(75, 230, 0)'; 
+    }else if (value<=200 && value>150) {
+        return 'rgba(0, 135, 50)'; 
+    }else if (value<=250 && value>200) {
+        return 'rgba(115, 180, 255)'; 
+    }else if (value<=300 && value>250) {
+        return 'rgba(0, 90, 230)'; 
+    }else if (value<=400 && value>300) {
+        return 'rgba(220, 115, 255)'; 
+    }else{
+      return 'rgba(135, 0, 170)'; 
     }
   };
 

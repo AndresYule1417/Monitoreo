@@ -171,8 +171,69 @@ class ProyectosViewSet(viewsets.GenericViewSet):
                     Qq80 = Qq80.reindex(new_order, axis=0)
                     Qq85 = Qq85.reindex(new_order, axis=0)
                     Qq90 = Qq90.reindex(new_order, axis=0)
-                    Qq95 = Qq95.reindex(new_order, axis=0)
+                    Qq95 = Qq95.reindex(new_order, axis=0)                   
 
                     data4.append({"index":new_order, "data4": {"Qm_mes":Qm_mes, "Qq5":Qq5, "Qq10":Qq10, "Qq15":Qq15, "Qq20":Qq20, "Qq25":Qq25, "Qq30":Qq30, "Qq35":Qq35, "Qq40":Qq40, "Qq45":Qq45, "Qq50":Qq50, "Qq55":Qq55, "Qq60":Qq60, "Qq65":Qq65, "Qq70":Qq70, "Qq75":Qq75, "Qq80":Qq80, "Qq85":Qq85, "Qq90":Qq90, "Qq95":Qq95}})
+
+                df_rham = pd.read_excel(fileName, sheet_name='ESCORRENTIA', skiprows=4, usecols="A:M")  
+                df_rham.rename(columns={'Unnamed: 0':'UA'}, inplace=True)
+                df_rham = df_rham.reset_index(drop=True).set_index('UA')
+                result1 = df_rham.to_json(orient="split")
+                data5 = loads(result1)                      
+
+                df_rhah = pd.read_excel(fileName, sheet_name='ESCORRENTIA', skiprows=4, usecols="P:AB")
+                df_rhah.rename(columns={'Unnamed: 15':'UA'}, inplace=True)
+                df_rhah = df_rhah.reset_index(drop=True).set_index('UA')
+                result2 = df_rhah.to_json(orient="split")
+                data6 = loads(result2)            
+
+                df_rhas = pd.read_excel(fileName, sheet_name='ESCORRENTIA', skiprows=4, usecols="AD:AP")
+                df_rhas.rename(columns={'Unnamed: 29':'UA'}, inplace=True)
+                df_rhas = df_rhas.reset_index(drop=True).set_index('UA')
+                result3 = df_rhas.to_json(orient="split")
+                data7 = loads(result3)
+
+                q_anual_med = pd.read_excel(fileName, sheet_name='QAnual_med', skiprows=4)  
+                q_anual_med['fecha'] = q_anual_med['fecha'].astype(str)
+                q_anual_med = q_anual_med.reset_index(drop=True).set_index('fecha')    
+                q_anual_med = q_anual_med.T#comentar           
+                res8 = q_anual_med.to_json(orient="split")
+                qamed= loads(res8) 
+
+                q_anual_min = pd.read_excel(fileName, sheet_name='QAnual_min', skiprows=4)  
+                q_anual_min['fecha'] = q_anual_min['fecha'].astype(str)
+                q_anual_min = q_anual_min.reset_index(drop=True).set_index('fecha')    
+                q_anual_min = q_anual_min.T#comentar           
+                res8 = q_anual_min.to_json(orient="split")
+                qamin= loads(res8)              
+
+                q_anual_max = pd.read_excel(fileName, sheet_name='QAnual_max', skiprows=4)  
+                q_anual_max['fecha'] = q_anual_max['fecha'].astype(str)
+                q_anual_max = q_anual_max.reset_index(drop=True).set_index('fecha')    
+                q_anual_max = q_anual_max.T#comentar           
+                res8 = q_anual_max.to_json(orient="split")
+                qamax= loads(res8)    
+
+                l_anual_med = pd.read_excel(fileName, sheet_name='Line_QAnual_med', skiprows=4)  
+                l_anual_med['fecha'] = l_anual_med['fecha'].astype(str)
+                l_anual_med = l_anual_med.reset_index(drop=True).set_index('fecha')    
+                l_anual_med = l_anual_med.T         
+                res81 = l_anual_med.to_json(orient="split")
+                lamed = loads(res81)    
+
+                l_anual_min = pd.read_excel(fileName, sheet_name='Line_QAnual_min', skiprows=4)  
+                l_anual_min['fecha'] = l_anual_min['fecha'].astype(str)
+                l_anual_min = l_anual_min.reset_index(drop=True).set_index('fecha')    
+                l_anual_min = l_anual_min.T     
+                res81 = l_anual_min.to_json(orient="split")
+                lamin= loads(res81)   
+
+                l_anual_max = pd.read_excel(fileName, sheet_name='Line_QAnual_max', skiprows=4)  
+                l_anual_max['fecha'] = l_anual_max['fecha'].astype(str)
+                l_anual_max = l_anual_max.reset_index(drop=True).set_index('fecha')    
+                l_anual_max = l_anual_max.T#comentar           
+                res81 = l_anual_max.to_json(orient="split")
+                lamax= loads(res81)                                                    
+
                 
-        return Response({'data1': parsed1, 'data3':parsed3, 'data4': data4}, status=status.HTTP_201_CREATED)        
+        return Response({'data1':parsed1, 'data3':parsed3, 'data4':data4, 'data5':data5, 'data6':data6, 'data7':data7, 'data8': {'qamed':qamed, 'qamin':qamin, 'qamax':qamax, 'lamed':lamed, 'lamin':lamin, 'lamax':lamax}}, status=status.HTTP_201_CREATED)        
