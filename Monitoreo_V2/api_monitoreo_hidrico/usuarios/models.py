@@ -32,7 +32,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     class Meta:
         db_table = 'usuarios'   
 
-    #REQUIRED_FIELDS = ["email"]
+    REQUIRED_FIELDS = ["username"]
     
     USERNAME_FIELD = 'email'
 
