@@ -8,7 +8,6 @@ import { DialogCrudComponent } from './dialog-crud/dialog-crud.component';
 
 import { CrudService } from './crud.service';
 
-
 @Component({
   selector: 'app-crud',
   templateUrl: './crud.component.html',
@@ -16,28 +15,34 @@ import { CrudService } from './crud.service';
 })
 export class CrudComponent implements OnInit {
 
+  //declaracion de variables para renderizar tablas html
   displayedColumns: string[] = ['id', 'nombre', 'fecha', 'archivo', 'acciones'];
   dataSource: any;  
 
   submitted: boolean = false;
   archivo?: File | any = null;
 
+  //declaracion de formulario para enviar datos
   form = new FormGroup({
     nombre: new FormControl({value: "", disabled: false}, Validators.required),
     fecha: new FormControl({value: "", disabled: false}, Validators.required),
     archivo: new FormControl({value: "", disabled: false}, Validators.required),
   });
 
+  //inizializacion de clases
   constructor(private router:Router, private service:CrudService, public dialog: MatDialog){}
 
+  //al inicializar el componente se obtiene la lista de todos los proyectos
   ngOnInit(): void {
     this.getList();    
   }
 
+  //retorna errores presente en la entrada del formulario
   get f() { 
     return this.form.controls; 
   }
 
+  //captura los datos del formulario
   onSubmit(){    
     this.submitted = true;
     if (this.form.invalid) {
@@ -52,10 +57,12 @@ export class CrudComponent implements OnInit {
     });
   }
 
+  //carga el archivo excel
   onChangeArchivo(event: any) {
     this.archivo = event.target.files[0];     
   }
 
+  //elimina un proyecto
   deleteProject(id: number){
     this.service.destroy(id).subscribe({
       next: (result) => {        
@@ -63,7 +70,8 @@ export class CrudComponent implements OnInit {
       }
     });    
   }
-
+  
+  //edita un proyecto
   editProject(value: any){
     const dialogo = this.dialog.open(DialogCrudComponent, {         
       width: '500px',        
@@ -74,6 +82,7 @@ export class CrudComponent implements OnInit {
     });
   }
 
+  //obtiene todos los proyectos
   getList(){
     this.service.list().subscribe({
       next: (result: any) => {         
@@ -82,6 +91,7 @@ export class CrudComponent implements OnInit {
     });    
   }
 
+  //filtra datos en tabla
   applyFilter(event:any){
     const filterValue = (event.target as HTMLInputElement).value;     
     this.dataSource.filter = filterValue.trim().toLowerCase();       

@@ -1,23 +1,22 @@
-import { Component, OnInit, AfterViewInit, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+//import de librerias para realizar graficos
 import { Chart, registerables } from 'chart.js'
 import annotationPlugin from 'chartjs-plugin-annotation';
 
 Chart.register(...registerables)
 Chart.register(annotationPlugin);
 
+//import de servicio donde se encuentran las peticiones
 import { CrudService } from '../crud.service';
 
 @Component({
   selector: 'app-view-project',
   templateUrl: './view-project.component.html',
-  styleUrl: './view-project.component.scss',
-  //encapsulation: ViewEncapsulation.ShadowDom,
+  styleUrl: './view-project.component.scss',  
 })
-export class ViewProjectComponent implements OnInit, AfterViewInit {
-
-  //@ViewChild('space_ohts') space_ohts!: ElementRef;
+export class ViewProjectComponent implements OnInit {  
 
   data: any = {
     id: "",
@@ -29,18 +28,16 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
   space: any;
   space_ohts: any;
   
+  //inicializacion de constructor con sus clases
   constructor(private elementRef:ElementRef, private service:CrudService, private activatedRoute:ActivatedRoute){}
 
-  ngAfterViewInit(): void {    
-  }
-
   ngOnInit(): void {    
-    this.space = this.elementRef.nativeElement.querySelector('#space');
-    this.space_ohts = this.elementRef.nativeElement.querySelector('#space_ohts');     
+    this.space = this.elementRef.nativeElement.querySelector('#space');//se obitiene el selector donde se renderiza el rendimiento hidrico
+    this.space_ohts = this.elementRef.nativeElement.querySelector('#space_ohts');//selector para renderizar las grafias de OHTS
     
-    const id = this.activatedRoute.snapshot.paramMap.get('id');      
-    //this.getProject(id!); 
-    this.getProject_OHTS(id!);   
+    const id = this.activatedRoute.snapshot.paramMap.get('id');//se obtiene el id de la url      
+    //this.getProject(id!);// funcion para renderizar el rendimiento hidrico
+    this.getProject_OHTS(id!);//funcion para renderizar graficas de OHTS   
   }
 
   async getProject_OHTS(id:string){
@@ -376,6 +373,7 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
     });
   }
 
+  //funcion q renderiza graficas tipo lineas
   renderArea2(columns:any, data3:any, id:any, titulo:any){    
     const canvas = <HTMLCanvasElement> document.getElementById(id);    
     const ctx = canvas.getContext('2d');
@@ -402,6 +400,7 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
     });
   }
 
+  //fincion que renderiza graficas tipo line con caudales
   renderLineTend(columns:any, qamed:any, qamin:any, qamax:any, lamed:any, lamin:any, lamax:any, id:any, titulo:any){
     const canvas = <HTMLCanvasElement> document.getElementById(id);    
     const ctx = canvas.getContext('2d');
@@ -479,6 +478,7 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
     });
   }
 
+  //funcion q renderiza graficas tipo line con percentiles
   renderLine(columns:any, data4:any, id:any, titulo:any){         
     const canvas = <HTMLCanvasElement> document.getElementById(id);    
     const ctx = canvas.getContext('2d');
@@ -641,7 +641,8 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
       }    
     });
   }
-
+  
+  //funcion para renderizar graficas tipo bar
   renderBar(categorias:any, valores:any, promedio:any, id:any, titulo:any, flag:number){
     var backgroundColors = []
     if(flag==0){
@@ -701,6 +702,7 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
     });
   }
 
+  //funcion que obtiene colores dependiendo un rango
   getBackgroundColor(value:any){
     if (value <= 3) {
         return 'rgba(255, 0, 0)'; 
@@ -731,6 +733,7 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
     }
   };
 
+   //funcion que obtiene colores dependiendo un rango
   getBackgroundColorEsco(value:any){
     if (value <= 20) {
         return 'rgba(255, 0, 0)'; 
@@ -756,6 +759,4 @@ export class ViewProjectComponent implements OnInit, AfterViewInit {
       return 'rgba(135, 0, 170)'; 
     }
   };
-
-
 }

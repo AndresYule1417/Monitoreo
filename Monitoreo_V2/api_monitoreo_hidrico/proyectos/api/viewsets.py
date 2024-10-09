@@ -81,13 +81,14 @@ class ProyectosViewSet(viewsets.GenericViewSet):
             return Response(data={"project":result_serializer.data, "xlsx":{"rham": parsed1, "rhah": parsed2, "rhas": parsed3}}, status=status.HTTP_200_OK)
         return Response({'error':'No existe proyecto'}, status=status.HTTP_400_BAD_REQUEST) 
     
+    #peticion para retornar datos y  graficar LA OFERTA HIDRICA TOTAL SUPERFICIAL OHTS
     @action(detail=True, methods=['get']) 
     def retrieve_ohts(self, request, pk=None):
-        result = self.serializer_class().Meta.model.objects.filter(id=pk).first()
+        result = self.serializer_class().Meta.model.objects.filter(id=pk).first()#consulta que retorna el dato con la llave primaria
         if result:            
             result_serializer = self.serializer_class(result)           
-            fileName = "." + result_serializer.data['archivo']  
-            if os.path.exists(fileName):        
+            fileName = "." + result_serializer.data['archivo']#se optiene la ruta del archivo 
+            if os.path.exists(fileName):#si el archivo existe se procede a leer el excel y obtener los dataframe        
                 df_info = pd.read_excel(fileName, sheet_name='INFO', skiprows=4, usecols="A:G")  
                 result1 = df_info.to_json(orient="records")
                 parsed1 = loads(result1)
@@ -173,6 +174,7 @@ class ProyectosViewSet(viewsets.GenericViewSet):
                     Qq90 = Qq90.reindex(new_order, axis=0)
                     Qq95 = Qq95.reindex(new_order, axis=0)                   
 
+                    #recoleccion de datos de los percentiles
                     data4.append({"index":new_order, "data4": {"Qm_mes":Qm_mes, "Qq5":Qq5, "Qq10":Qq10, "Qq15":Qq15, "Qq20":Qq20, "Qq25":Qq25, "Qq30":Qq30, "Qq35":Qq35, "Qq40":Qq40, "Qq45":Qq45, "Qq50":Qq50, "Qq55":Qq55, "Qq60":Qq60, "Qq65":Qq65, "Qq70":Qq70, "Qq75":Qq75, "Qq80":Qq80, "Qq85":Qq85, "Qq90":Qq90, "Qq95":Qq95}})
 
                 df_rham = pd.read_excel(fileName, sheet_name='ESCORRENTIA', skiprows=4, usecols="A:M")  
@@ -235,5 +237,5 @@ class ProyectosViewSet(viewsets.GenericViewSet):
                 res81 = l_anual_max.to_json(orient="split")
                 lamax= loads(res81)                                                    
 
-                
+        #respuesta de todos los datos para graficar cada imagen     
         return Response({'data1':parsed1, 'data3':parsed3, 'data4':data4, 'data5':data5, 'data6':data6, 'data7':data7, 'data8': {'qamed':qamed, 'qamin':qamin, 'qamax':qamax, 'lamed':lamed, 'lamin':lamin, 'lamax':lamax}}, status=status.HTTP_201_CREATED)        
