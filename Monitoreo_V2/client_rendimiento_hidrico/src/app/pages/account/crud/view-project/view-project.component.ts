@@ -1,5 +1,7 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { GoogleMap, MapInfoWindow, MapMarker } from '@angular/google-maps';
+
 
 //import de librerias para realizar graficos
 import { Chart, registerables } from 'chart.js'
@@ -26,30 +28,68 @@ export class ViewProjectComponent implements OnInit {
   }; 
 
   space: any;
-  space_ohts: any;
-  
+  space_ohts: any;  
+
+  map: google.maps.Map | undefined;  
+
   //inicializacion de constructor con sus clases
   constructor(private elementRef:ElementRef, private service:CrudService, private activatedRoute:ActivatedRoute){}
 
   ngOnInit(): void {    
     this.space = this.elementRef.nativeElement.querySelector('#space');//se obitiene el selector donde se renderiza el rendimiento hidrico
-    this.space_ohts = this.elementRef.nativeElement.querySelector('#space_ohts');//selector para renderizar las grafias de OHTS
-    
-    const id = this.activatedRoute.snapshot.paramMap.get('id');//se obtiene el id de la url      
+    this.space_ohts = this.elementRef.nativeElement.querySelector('#space_ohts');//selector para renderizar las grafias de OHTS    
+    const id = this.activatedRoute.snapshot.paramMap.get('id');//se obtiene el id de la url        
     //this.getProject(id!);// funcion para renderizar el rendimiento hidrico
-    this.getProject_OHTS(id!);//funcion para renderizar graficas de OHTS   
-  }
+    //this.getProject_OHTS(id!);//funcion para renderizar graficas de OHTS 
+    
+    this.initMap();
+  } 
+
+  async initMap() {
+    this.map = new google.maps.Map(document.getElementById("map") as HTMLElement, {zoom: 3, center: { lat: 0, lng: -180 }, mapTypeId: "terrain",});    
+  
+    const flightPlanCoordinates = [
+      { lat: 37.772, lng: -122.214 },
+      { lat: 21.291, lng: -157.821 },
+      { lat: -18.142, lng: 178.431 },
+      { lat: -27.467, lng: 153.027 },
+    ];
+
+    const flightPath = new google.maps.Polyline({
+      path: flightPlanCoordinates,
+      geodesic: true,
+      strokeColor: "#FF0000",
+      strokeOpacity: 1.0,
+      strokeWeight: 2,
+    });
+  
+    flightPath.setMap(this.map);
+  } 
 
   async getProject_OHTS(id:string){
     const prueba = await this.service.retrieve_ohts(id);
     prueba.subscribe({
-      next: (result:any) =>{
-        //console.log(result.data3);       
-        //console.log(result.data3.data[0]);      
-        //console.log(result.data5); 
-        //console.log(result.data6); 
-        console.log(result); 
-        for(let i=0; i<result.data1.length; i++){
+      next: (result:any) =>{        
+        //console.log(result); 
+        console.log(result.data2);
+        //this.vertices = result.data2[0][0];
+
+        //this.map = new google.maps.Map(document.getElementById("map") as HTMLElement, {zoom: 3, center: { lat: 0, lng: -180 }, mapTypeId: "terrain",});    
+        this.map = new google.maps.Map(document.getElementById("map") as HTMLElement, {zoom: 3, center: { lat: 0, lng: 20 }, mapTypeId: "terrain",}); 
+  
+        const flightPlanCoordinates = result.data2;
+          
+        const flightPath = new google.maps.Polyline({
+          path: flightPlanCoordinates,
+          geodesic: true,
+          strokeColor: "#FF0000",
+          strokeOpacity: 1.0,
+          strokeWeight: 2,
+        });
+      
+        flightPath.setMap(this.map);
+
+        /*for(let i=0; i<result.data1.length; i++){
           const area1 = document.createElement("div");
           area1.setAttribute("id", "area1_" + i);          
           area1.style.display = "flex";         
@@ -230,7 +270,7 @@ export class ViewProjectComponent implements OnInit {
 
           this.renderLineTend(colu_qamed, valo_qamed, valo_qamin, valo_qamax, valo_lamed, valo_lamin, valo_lamax,  "qamed_"+i, "Tendencia de caudales");
           this.renderLine(result.data4[i]['index'], result.data4[i]['data4'], "canvas3_" + i, 'Rendimiento Hídrico Mensual Año Humedo');          
-        }
+        }*/
       }
     });
   }

@@ -1,10 +1,4 @@
 import {
-  CdkScrollable,
-  ScrollDispatcher,
-  ScrollingModule,
-  ViewportRuler
-} from "./chunk-LD6P7AY3.js";
-import {
   animate,
   animateChild,
   group,
@@ -14,6 +8,12 @@ import {
   transition,
   trigger
 } from "./chunk-2GEFJYDB.js";
+import {
+  CdkScrollable,
+  ScrollDispatcher,
+  ScrollingModule,
+  ViewportRuler
+} from "./chunk-LD6P7AY3.js";
 import {
   BidiModule,
   Directionality,

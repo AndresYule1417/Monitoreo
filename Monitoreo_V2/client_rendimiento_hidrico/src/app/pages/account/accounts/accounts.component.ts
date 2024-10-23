@@ -1,3 +1,4 @@
+//importacion de librerias
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
@@ -13,15 +14,19 @@ import { AccountsService } from './accounts.service';
 })
 export class AccountsComponent implements OnInit{
 
+  //declaracion de variables para tabla
   displayedColumns: string[] = ['id', 'username', 'email', 'acciones'];
   dataSource: any; 
 
+  //invocacion de constructor con sobrenombres para clases
   constructor(private service: AccountsService, public dialog: MatDialog){}
 
+  //funcion que se ejecuta al iniciar el componente
   ngOnInit(): void {
     this.getList();    
   }
 
+  //funcion que abre un cuadro de dialogo para editar un usuario
   edit(value:any){    
     const dialogo = this.dialog.open(DialogAccountComponent, {         
       width: '500px',        
@@ -32,6 +37,7 @@ export class AccountsComponent implements OnInit{
     });
   }
 
+  //funcion que elimina un usuario
   delete(id:number){
     this.service.destroy(id).subscribe({
       next: (result) => {
@@ -40,6 +46,7 @@ export class AccountsComponent implements OnInit{
     });
   }
 
+  //funcion que retorna una lista de usuarios
   getList(){
     this.service.list().subscribe({
       next: (result:any) => {
@@ -47,5 +54,4 @@ export class AccountsComponent implements OnInit{
       }
     });    
   }
-
 }

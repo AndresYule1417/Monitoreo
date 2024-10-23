@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTableModule } from '@angular/material/table';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 import { AccountRoutingModule } from './account-routing.module';
 import { AdminComponent } from './admin/admin.component';
@@ -36,6 +37,7 @@ import { NewsComponent } from './news/news.component';
     MatDialogModule,
     MatFormFieldModule,
     MatTableModule,   
+    GoogleMapsModule,
   ]
 })
 export class AccountModule { }
