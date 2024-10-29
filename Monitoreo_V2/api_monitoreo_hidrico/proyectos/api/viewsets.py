@@ -8,6 +8,7 @@ import pandas as pd
 from json import loads, dumps
 
 import re
+import ast
 
 from proyectos.api.serializers import CreateProyectoSerializer, UpdateProyectoSerializer
 from proyectos.models import Proyectos
@@ -239,32 +240,41 @@ class ProyectosViewSet(viewsets.GenericViewSet):
                 res81 = l_anual_max.to_json(orient="split")
                 lamax= loads(res81)    
 
-                """df_gp = pd.read_excel(fileName, sheet_name='Mapa_Geopandas_UHA', usecols=['Nombre_1', 'Nombre_SZH', 'geometry'])  
+                df_gp = pd.read_excel(fileName, sheet_name='Mapa_Geopandas_UHA', usecols=['Nombre_1', 'Nombre_SZH', 'geometry'])  
                 json_tota = []
-                for item in range(len(df_gp)):
-                    string = df_gp['geometry'][item].replace('POLYGON Z ', '')
-                    nombre = df_gp['Nombre_1'][item]
-                    len_string = len(string)
-                    string = string[2:len_string-2]
-                    list_string = list(string.split(","))  
-                    list_string.pop()    
-                    json_df = []
-                    json_tota.append({item:json_df})
-                    for item1 in list_string: 
-                        item_array = item1[1:].split(" ")   
-                        #json_df.append({'lat':item_array[0], 'lng':item_array[1]})  
-                        lat = re.findall(r'\d+\.\d+', item_array[0])
-                        lng = re.findall(r'\d+\.\d+', item_array[1])         
-                        json_df.append({'lat':float(lat[0]), 'lng':float(lng[0])})"""
                 
-                             
-        """json_tota = [
-            {'lat': 4790215.6798, 'lng': 2032069.8341000008}, 
-            {'lat': 4790203.179800001, 'lng': 2032069.8341000008},
-            {'lat': 4790203.179800001, 'lng': 2032032.3340999994},
-            {'lat': 4790190.679800002, 'lng': 2032032.3340999994},                                
-        ]"""
 
+                """for item in range(len(df_gp)):
+                    list_string = list(df_gp['geometry'][item].split(","))
+                    list_string.pop() 
+                    json_df = []
+                    json_tota.append(json_df)   
+                    if(item=):                            
+                        for item1 in list_string:
+                            item_array = re.findall(r"[-+]?\d*\.?\d+|[-+]?\d+", item1)                        
+                            json_df.append({'lat':float(item_array[1]), 'lng':float(item_array[0])})"""
+
+                list_of_dicts = ast.literal_eval(df_gp['geometry'][0])
+                print(len(list_of_dicts))
+
+                #list_of_dicts = ast.literal_eval(df_gp['geometry'][1])
+                #print(len(list_of_dicts))
+
+                #list_of_dicts = ast.literal_eval(df_gp['geometry'][2])
+                #print(len(list_of_dicts))
+                
+                
+
+  
+
+                      
+                    
+                        
+
+
+
+        print(json_tota)
+                        
         json_tota = [
             {'lat': 47, 'lng': 20}, 
             {'lat': 47, 'lng': 20},
@@ -276,7 +286,7 @@ class ProyectosViewSet(viewsets.GenericViewSet):
             {'lat': 47, 'lng': 20}, 
             {'lat': 47, 'lng': 20}, 
             {'lat': 47, 'lng': 20},
-        ]                           
+        ]                   
 
         #respuesta de todos los datos para graficar cada imagen     
-        return Response({'data1':parsed1, 'data2':json_tota, 'data3':parsed3, 'data4':data4, 'data5':data5, 'data6':data6, 'data7':data7, 'data8': {'qamed':qamed, 'qamin':qamin, 'qamax':qamax, 'lamed':lamed, 'lamin':lamin, 'lamax':lamax}}, status=status.HTTP_201_CREATED)        
+        return Response({'data1':parsed1, 'data2':list_of_dicts, 'data3':parsed3, 'data4':data4, 'data5':data5, 'data6':data6, 'data7':data7, 'data8': {'qamed':qamed, 'qamin':qamin, 'qamax':qamax, 'lamed':lamed, 'lamin':lamin, 'lamax':lamax}}, status=status.HTTP_201_CREATED)        
