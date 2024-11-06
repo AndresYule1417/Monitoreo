@@ -30,10 +30,23 @@ class UpdateProyectoSerializer(serializers.ModelSerializer):
         except:
             return value       
     
+    #funcion que gestiona un archivo para sobreescribir o actualizar - adicion de codigo
+    def validate_archivo_geo(self, value):              
+        myPath = settings.MEDIA_ROOT + "/" + str(self.instance.archivo_geo)        
+        try:
+            if(os.path.exists(myPath) and value == None):            
+                return self.instance.archivo_geo          
+            if(os.path.exists(myPath) and value != None):            
+                os.remove(myPath)            
+                return value
+        except:
+            return value       
+    
     #funcion que actualiza un proyecto
     def update(self, instance, validated_data):            
         instance.nombre = validated_data['nombre']
         instance.fecha = validated_data['fecha']
-        instance.archivo = validated_data['archivo']        
+        instance.archivo = validated_data['archivo']    
+        instance.archivo_geo = validated_data['archivo_geo']#adicion de codigo  
         instance.save()
         return instance  

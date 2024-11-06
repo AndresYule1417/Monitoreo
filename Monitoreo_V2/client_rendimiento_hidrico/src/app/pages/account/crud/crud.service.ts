@@ -11,12 +11,13 @@ export class CrudService {
   constructor(private http: HttpClient) { }
 
   //crea un nevo proyecto, se realiza peticion post enviando documento excel
-  create(data:any, file:any){
+  create(data:any, file:any, file_geo:any){//adicion de codigo
     const headers  = { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('user') || '{}').token + ''};
     let formParams = new FormData();
     formParams.append('nombre', data.nombre);
     formParams.append('fecha', data.fecha);
     formParams.append('archivo', file);
+    formParams.append('archivo_geo', file_geo);
     return this.http.post(`${environment.API_URL}/proyectos/`, formParams, {headers});
   }
 

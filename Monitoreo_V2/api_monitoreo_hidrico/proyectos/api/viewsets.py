@@ -7,6 +7,8 @@ import os
 import pandas as pd
 from json import loads, dumps
 
+import geojson
+import pandas_geojson as pdg
 import re
 import ast
 
@@ -40,6 +42,9 @@ class ProyectosViewSet(viewsets.GenericViewSet):
             archivo = "." + str(result_serializer.data['archivo'])            
             if(os.path.exists(archivo)):
                 os.remove(archivo) 
+            archivo_geo = "." + str(result_serializer.data['archivo_geo'])#adicion de codigo            
+            if(os.path.exists(archivo_geo)):
+                os.remove(archivo_geo) 
             
             result_delete = result.delete()       
             if(result_delete[0] != 0):
@@ -90,7 +95,7 @@ class ProyectosViewSet(viewsets.GenericViewSet):
         result = self.serializer_class().Meta.model.objects.filter(id=pk).first()#consulta que retorna el dato con la llave primaria
         if result:            
             result_serializer = self.serializer_class(result)           
-            fileName = "." + result_serializer.data['archivo']#se optiene la ruta del archivo 
+            fileName = "." + result_serializer.data['archivo']#se optiene la ruta del archivo             
             if os.path.exists(fileName):#si el archivo existe se procede a leer el excel y obtener los dataframe        
                 df_info = pd.read_excel(fileName, sheet_name='INFO', skiprows=4, usecols="A:G")  
                 result1 = df_info.to_json(orient="records")
@@ -240,53 +245,23 @@ class ProyectosViewSet(viewsets.GenericViewSet):
                 res81 = l_anual_max.to_json(orient="split")
                 lamax= loads(res81)    
 
-                df_gp = pd.read_excel(fileName, sheet_name='Mapa_Geopandas_UHA', usecols=['Nombre_1', 'Nombre_SZH', 'geometry'])  
-                json_tota = []
-                
-
-                """for item in range(len(df_gp)):
-                    list_string = list(df_gp['geometry'][item].split(","))
-                    list_string.pop() 
-                    json_df = []
-                    json_tota.append(json_df)   
-                    if(item=):                            
-                        for item1 in list_string:
-                            item_array = re.findall(r"[-+]?\d*\.?\d+|[-+]?\d+", item1)                        
-                            json_df.append({'lat':float(item_array[1]), 'lng':float(item_array[0])})"""
-
-                list_of_dicts = ast.literal_eval(df_gp['geometry'][0])
-                print(len(list_of_dicts))
-
-                #list_of_dicts = ast.literal_eval(df_gp['geometry'][1])
-                #print(len(list_of_dicts))
-
-                #list_of_dicts = ast.literal_eval(df_gp['geometry'][2])
-                #print(len(list_of_dicts))
-                
-                
-
-  
-
-                      
+            json_tota = []
+            geo_json = []
+            fileNameGeo = "." + result_serializer.data['archivo_geo']#se optiene la ruta del archivo 
+            if(os.path.exists(fileNameGeo)):                
+                geojson = pdg.read_geojson(fileNameGeo)
+                for item in range(len(geojson.features)): 
+                    geo_json = []
+                    if(geojson.features[item]['geometry']['type']=="Polygon"):
+                        for item1 in range(len(geojson.features[item]['geometry']['coordinates'][0])):                           
+                            geo_json.append({'lat':geojson.features[item]['geometry']['coordinates'][0][item1][1], 'lng':geojson.features[item]['geometry']['coordinates'][0][item1][0]})                      
+                    if(geojson.features[item]['geometry']['type']=="MultiPolygon"):
+                        for item1 in range(len(geojson.features[item]['geometry']['coordinates'])):  
+                            if(len(geojson.features[item]['geometry']['coordinates'][item1][0])>100):                           
+                                for item2 in range(len(geojson.features[item]['geometry']['coordinates'][item1][0])):      
+                                    geo_json.append({'lat':geojson.features[item]['geometry']['coordinates'][item1][0][item2][1], 'lng':geojson.features[item]['geometry']['coordinates'][item1][0][item2][0]})
+                                      
+                    json_tota.append(geo_json) 
                     
-                        
-
-
-
-        print(json_tota)
-                        
-        json_tota = [
-            {'lat': 47, 'lng': 20}, 
-            {'lat': 47, 'lng': 20},
-            {'lat': 47, 'lng': 20},
-            {'lat': 47, 'lng': 20},
-            {'lat': 47, 'lng': 20},
-            {'lat': 47, 'lng': 20},
-            {'lat': 47, 'lng': 20}, 
-            {'lat': 47, 'lng': 20}, 
-            {'lat': 47, 'lng': 20}, 
-            {'lat': 47, 'lng': 20},
-        ]                   
-
-        #respuesta de todos los datos para graficar cada imagen     
-        return Response({'data1':parsed1, 'data2':list_of_dicts, 'data3':parsed3, 'data4':data4, 'data5':data5, 'data6':data6, 'data7':data7, 'data8': {'qamed':qamed, 'qamin':qamin, 'qamax':qamax, 'lamed':lamed, 'lamin':lamin, 'lamax':lamax}}, status=status.HTTP_201_CREATED)        
+            #respuesta de todos los datos para graficar cada imagen     
+            return Response({'data1':parsed1, 'data2':json_tota, 'data3':parsed3, 'data4':data4, 'data5':data5, 'data6':data6, 'data7':data7, 'data8': {'qamed':qamed, 'qamin':qamin, 'qamax':qamax, 'lamed':lamed, 'lamin':lamin, 'lamax':lamax}}, status=status.HTTP_200_OK)        

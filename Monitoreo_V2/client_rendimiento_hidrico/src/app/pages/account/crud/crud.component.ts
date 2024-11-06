@@ -16,17 +16,19 @@ import { CrudService } from './crud.service';
 export class CrudComponent implements OnInit {
 
   //declaracion de variables para renderizar tablas html
-  displayedColumns: string[] = ['id', 'nombre', 'fecha', 'archivo', 'acciones'];
+  displayedColumns: string[] = ['id', 'nombre', 'fecha', 'archivo', 'archivo_geo', 'acciones'];//adicion de codigo
   dataSource: any;  
 
   submitted: boolean = false;
   archivo?: File | any = null;
+  archivo_geo?: File | any = null;//adicion de codigo
 
   //declaracion de formulario para enviar datos
   form = new FormGroup({
     nombre: new FormControl({value: "", disabled: false}, Validators.required),
     fecha: new FormControl({value: "", disabled: false}, Validators.required),
     archivo: new FormControl({value: "", disabled: false}, Validators.required),
+    archivo_geo: new FormControl({value: "", disabled: false}, Validators.required),//adicion de codigo
   });
 
   //inizializacion de clases
@@ -48,7 +50,7 @@ export class CrudComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }     
-    this.service.create(this.form.value, this.archivo).subscribe({
+    this.service.create(this.form.value, this.archivo, this.archivo_geo).subscribe({//adicion de codigo
       next: (result) => {        
         this.form.reset();
         this.submitted = false;
@@ -58,8 +60,18 @@ export class CrudComponent implements OnInit {
   }
 
   //carga el archivo excel
-  onChangeArchivo(event: any) {
-    this.archivo = event.target.files[0];     
+  onChangeArchivo(event: any) {//adicion de codigo
+    this.archivo = event.target.files[0];       
+    if(this.archivo.type != "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"){
+      this.archivo = "";
+      this.form.controls['archivo'].setValue("");
+    } 
+  }
+
+  //carga el archivo excel geo - adicion de codigo
+  onChangeArchivoGeo(event: any) {   
+    this.archivo_geo = event.target.files[0];
+    console.log(this.archivo_geo.type)     
   }
 
   //elimina un proyecto
