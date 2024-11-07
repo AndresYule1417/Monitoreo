@@ -98,6 +98,7 @@ class ProyectosViewSet(viewsets.GenericViewSet):
             fileName = "." + result_serializer.data['archivo']#se optiene la ruta del archivo             
             if os.path.exists(fileName):#si el archivo existe se procede a leer el excel y obtener los dataframe        
                 df_info = pd.read_excel(fileName, sheet_name='INFO', skiprows=4, usecols="A:G")  
+                #df_info =  df_info.rename(columns={'Unidad de analisis':'Unidad_de_analisis'})
                 result1 = df_info.to_json(orient="records")
                 parsed1 = loads(result1)
 
@@ -262,6 +263,6 @@ class ProyectosViewSet(viewsets.GenericViewSet):
                                     geo_json.append({'lat':geojson.features[item]['geometry']['coordinates'][item1][0][item2][1], 'lng':geojson.features[item]['geometry']['coordinates'][item1][0][item2][0]})
                                       
                     json_tota.append(geo_json) 
-                    
+
             #respuesta de todos los datos para graficar cada imagen     
             return Response({'data1':parsed1, 'data2':json_tota, 'data3':parsed3, 'data4':data4, 'data5':data5, 'data6':data6, 'data7':data7, 'data8': {'qamed':qamed, 'qamin':qamin, 'qamax':qamax, 'lamed':lamed, 'lamin':lamin, 'lamax':lamax}}, status=status.HTTP_200_OK)        
