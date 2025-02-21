@@ -1,0 +1,37 @@
+<!--html de lista de usuarios-->
+<div class="container">
+    <div class="card mt-5">
+        <div class="card-body">
+            <h2 class="text-center mb-4">Lista de Administradores</h2>
+            <div class="table-responsive">
+                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" >
+                    <ng-container matColumnDef="id">
+                        <th mat-header-cell *matHeaderCellDef class="textCenter">NO.</th>
+                        <td mat-cell *matCellDef="let element"> {{element.id}}</td>
+                    </ng-container>
+                
+                    <ng-container matColumnDef="username">
+                        <th mat-header-cell *matHeaderCellDef class="textCenter">NOMBRE</th>
+                        <td mat-cell *matCellDef="let element">{{element.username}}</td>
+                    </ng-container>
+                
+                    <ng-container matColumnDef="email">
+                        <th mat-header-cell *matHeaderCellDef class="textCenter">CORREO</th>
+                        <td mat-cell *matCellDef="let element">{{element.email}}</td>
+                    </ng-container>        
+                
+                    <ng-container matColumnDef="acciones">
+                        <th mat-header-cell *matHeaderCellDef class="textCenter">ACCIONES</th>
+                        <td mat-cell *matCellDef="let element">
+                            <button class="btn btn-primary btn-sm" (click)="edit(element)">Editar</button>
+                            <button class="btn btn-danger btn-sm" (click)="delete(element.id)">Eliminar</button>
+                        </td>
+                    </ng-container>
+                
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns" style="background:#34495e; color:white; font-weight:600; letter-spacing:1px;"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            </div>   
+        </div>
+    </div>
+</div>

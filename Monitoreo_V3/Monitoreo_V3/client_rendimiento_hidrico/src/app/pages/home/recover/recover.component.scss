@@ -1,0 +1,33 @@
+/*Estilos para dar forma al formulario de solicitud de reset de contraseña*/
+.contenedor{       
+    margin: 0; 
+    top: 62px; 
+    height: calc(100vh - 62px);  
+    width: 100%;    
+    position: relative;    
+}
+
+.childCont{
+    text-align: center;
+}
+
+h1 {    
+    color: #333;
+    font-size: 28px;
+    margin-top: 20px;
+    margin-bottom: 20px;     
+}
+
+.childCont1{    
+    max-width: 400px;
+    margin: auto;
+}
+
+.card{      
+    padding: 20px;  
+    margin:8px;       
+}
+
+.buttonCenter{    
+    text-align: center;
+}

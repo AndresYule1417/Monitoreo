@@ -1,0 +1,13 @@
+<!--Genera spiner hasta que carga las graficas-->
+<ngx-spinner type="ball-spin-clockwise"></ngx-spinner>
+
+<div class="headDiv">
+    <h4 style="margin: 0;">OFERTA HIDRICA</h4>
+</div>
+
+<!--Genera los tabs y las graficas-->
+<mat-tab-group (selectedTabChange)="tabChanged($event)">
+    <mat-tab *ngFor="let item of listProyectos; let j=index" [label]="(j+1) + '. ' + item.nombre">                
+        <div class="space_ohts{{j}}" style="width:100%;"></div>  
+    </mat-tab>    
+</mat-tab-group>
