@@ -99,7 +99,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'monitoreo_hidrico_v3',
         'USER': 'postgres',
-        'PASSWORD': 'postgres',#'12345',
+        'PASSWORD': '12345',#'12345',
         'HOST': 'localhost',
         'PORT': '5432',
     }

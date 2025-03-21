@@ -1,0 +1,35 @@
+<!--html personalizado de dialogo crud-->
+<div class="content">
+    <div class="header">
+        <h5 class="title">Editar Proyecto</h5>
+        <button type="button" class="btn-close btn" (click)="closeDialog()"></button>
+    </div>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" class="form-control" name="nombre" formControlName="nombre">
+            <div *ngIf="submitted && f.nombre.errors" class="error">                
+                Ingrese nombre del proyecto
+            </div>          
+        </div>
+        <div class="mb-3">
+            <label  for="fecha" class="form-label">Fecha de Creación</label>
+            <input type="datetime-local" class="form-control" name="fecha" formControlName="fecha">
+            <div *ngIf="submitted && f.fecha.errors" class="error">                
+                Ingrese fecha del proyecto
+            </div>               
+        </div>
+        <div class="mb-3">
+            <label  for="archivo" class="form-label">Archivo</label>
+            <input type="file" class="form-control" name="archivo" formControlName="archivo" (change)="this.onChangeArchivo($event)">
+            <div *ngIf="flagExcel" class="error">                
+                Cargue archivo Excel
+            </div>          
+        </div>
+        <div class="mb-3"><!--adicion de codigo-->
+            <label  for="archivo_geo" class="form-label">Archivo (geojson)</label>
+            <input type="file" class="form-control" name="archivo_geo" formControlName="archivo_geo" (change)="this.onChangeArchivoGeo($event)">
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+    </form>
+</div>

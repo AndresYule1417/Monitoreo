@@ -1,0 +1,76 @@
+//estilos para dialogo account
+.header{
+    width: 100%;
+    height: 64px;
+    display: flex;
+    background-color: #3498db;
+    color: white;    
+    align-items: center;
+}
+
+.header h5{
+    position: absolute;
+    left: 20px;     
+}
+
+.header .btn{
+    position: absolute;
+    right: 20px;   
+    color: black; 
+    opacity: 0.5;  
+}
+
+.header .btn:hover{
+    opacity: 1;
+}
+
+form{
+    margin: 16px;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    border-color: #3498db;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+    border-color: #2980b9;
+}
+
+.error{
+    border: solid 2px rgb(219, 71, 71);
+    position: absolute;
+    margin-top: 2px;  
+    padding: 8px;      
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 4px 4px 4px rgb(219, 71, 71, 0.2);    
+}
+
+.error::before {
+    content: '';
+    position: absolute;
+    top: -20px; /* Ajusta la posición vertical del pico */
+    left: 15%;
+    transform: translateX(-50%);
+    border-width: 10px; /* Ajusta el tamaño del pico */
+    border-style: solid;
+    border-color: transparent transparent rgb(219, 71, 71) transparent;    
+}
+
+/*****password*****/
+.password{
+    width: 100%;
+    position: relative;
+}
+
+.password input{
+    position: relative;
+}
+
+.password svg{
+    position: absolute;    
+    top: 20%;
+    right: 5%;
+}

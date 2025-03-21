@@ -1,0 +1,44 @@
+/*definicion de estilos para news component*/
+/* Parallax */
+.parallax {
+    background-image: url('/static/img/water-resources.jpg'); /* Asegúrate de tener esta imagen */
+    height: 400px;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+.parallax-content {
+    text-align: center;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.parallax-content h2 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    color: white;
+}
+
+/*****Noticias*****/
+.news-updates {
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin-bottom: 40px;
+}
+
+.news-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+}

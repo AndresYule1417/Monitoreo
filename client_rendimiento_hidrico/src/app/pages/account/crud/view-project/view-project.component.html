@@ -1,0 +1,17 @@
+<!--plantilla html en la cual abre un proyecto-->
+<div class="container">
+    <h1 class="text-center mt-5 mb-5">Detalle del Proyecto</h1>
+    <div class="card shadow">
+        <div class="card-body">            
+            <div class="project-info">
+                <p><strong>ID: </strong><span id="projectId">{{data.id}}</span></p>
+                <p><strong>Nombre: </strong><span id="projectName">{{data.nombre}}</span></p>
+                <p><strong>Fecha de Creación: </strong><span id="projectDate">{{data.fecha|date: "yyyy-MM-dd HH:mm"}}</span></p>
+                <p><strong>Archivo: </strong><span id="projectDate">{{data.archivo}}</span></p>
+            </div>           
+            <div class="text-center">
+                <a routerLink="/account/crud" class="btn btn-primary">Volver a la lista</a>
+            </div>
+        </div>
+    </div>  
+</div>
