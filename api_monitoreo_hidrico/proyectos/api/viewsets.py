@@ -31,26 +31,26 @@ class ProyectosViewSet(viewsets.GenericViewSet):
             proyecto = serializer.save()       
             data = {'id': proyecto.id}         
 
-            #informacion = CreateInformacionSerializer()
+            informacion = CreateInformacionSerializer()
             #print(informacion.create(data))
 
-            #caudal = CreateCaudalSerializer()
+            caudal = CreateCaudalSerializer()
             #print(caudal.create(data))
 
-            #rendimiento = CreateRendimientoSerializer()
+            rendimiento = CreateRendimientoSerializer()
             #print(rendimiento.create(data))
 
-            #escorrentia = CreateEscorrentiaSerializer()
+            escorrentia = CreateEscorrentiaSerializer()
             #print(escorrentia.create(data))
 
-            #oferta_multi_anual = CreateOfertaMultiAnualSerializer()
+            oferta_multi_anual = CreateOfertaMultiAnualSerializer()
             #print(oferta_multi_anual.create(data))
 
-            #oferta_total = CreateOfertaTotalSerializer()
+            oferta_total = CreateOfertaTotalSerializer()
             #print(oferta_total.create(data))
 
             indice = CreateIndiceSerializer()
-            print(indice.create(data))
+            #print(indice.create(data))
 
             return Response({'message': 'Proyecto Reguistrado'}, status=status.HTTP_201_CREATED)             
         return Response({'message': 'Error en Registro', 'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
