@@ -11,13 +11,14 @@ from datetime import datetime
 
 from api_db.cnx_db import CnxDb
 
+#clase para serailizar el modelo oferta total
 class CreateOfertaTotalSerializer(serializers.ModelSerializer):
     class Meta:
         model = OfertaMultiAnual
         fields = "__all__"
     
-    def create(self, validated_data):   
-        print("*****2*****")
+    #funcion para guardar datos
+    def create(self, validated_data):          
         result = Proyectos.objects.filter(id=validated_data['id']).first()        
         if result:                       
             result_serializer = CreateProyectoSerializer(result)           
@@ -29,6 +30,7 @@ class CreateOfertaTotalSerializer(serializers.ModelSerializer):
         #return super().create(validated_data)
         return True
     
+    #funcion que lee el documento excel y los datos los guarda en la base de datos
     def oferta_total(self, fileName, validated_data):
         df_rh_medio = pd.read_excel(fileName, sheet_name='OFERTA TOTAL DIARIA (m3s-1)')                    
 

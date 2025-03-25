@@ -2,6 +2,7 @@ from django.db import models
 
 from proyectos.models import Proyectos
 
+#clase q crea el modelo indice y creal los campos en la base de datos
 class Indice(models.Model):
     id_proyecto = models.ForeignKey(Proyectos, to_field='id', db_column='id_proyecto', on_delete=models.RESTRICT, null=False, blank=False)
     mes = models.CharField(max_length=6, null=False, blank=False)

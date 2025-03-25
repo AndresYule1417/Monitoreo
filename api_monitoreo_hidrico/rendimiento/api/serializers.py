@@ -1,3 +1,4 @@
+#llamado de librerias y clases
 from rest_framework import serializers
 
 from rendimiento.models import Rendimiento
@@ -11,11 +12,13 @@ from datetime import datetime
 
 from api_db.cnx_db import CnxDb
 
+#clase para serializar resndimiento
 class CreateRendimientoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rendimiento
         fields = "__all__"
     
+    #funcion para guardar los datos de rendimiento
     def create(self, validated_data):       
         result = Proyectos.objects.filter(id=validated_data['id']).first()        
         if result:                       
@@ -28,6 +31,7 @@ class CreateRendimientoSerializer(serializers.ModelSerializer):
         #return super().create(validated_data)
         return True
     
+    #funcion que lee el documento excel y los datos los guarda en la base de datos
     def rendimiento(self, fileName, validated_data):
         df_rh_medio = pd.read_excel(fileName, sheet_name='RENDIMIENTO HÍDRICO', skiprows=4, usecols="A:M")    
         df_rh_medio.rename(columns={'Unnamed: 0':'UA'}, inplace=True)                   

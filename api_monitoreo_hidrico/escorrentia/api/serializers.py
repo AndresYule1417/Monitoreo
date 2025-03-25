@@ -11,11 +11,13 @@ from datetime import datetime
 
 from api_db.cnx_db import CnxDb
 
+#clase para serialiar el modelo escorrentia
 class CreateEscorrentiaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Escorrentia
         fields = "__all__"
     
+    #funcion para guardar datos de escorrentia
     def create(self, validated_data):       
         result = Proyectos.objects.filter(id=validated_data['id']).first()        
         if result:                       
@@ -28,6 +30,7 @@ class CreateEscorrentiaSerializer(serializers.ModelSerializer):
         #return super().create(validated_data)
         return True
     
+    #funcion que lee el documento excel y guarda los datos en la base de datos
     def escorrentia(self, fileName, validated_data):
         df_rh_medio = pd.read_excel(fileName, sheet_name='ESCORRENTIA', skiprows=4, usecols="A:M")    
         df_rh_medio.rename(columns={'Unnamed: 0':'UA'}, inplace=True)                   

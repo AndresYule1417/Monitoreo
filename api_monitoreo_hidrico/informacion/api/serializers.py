@@ -23,12 +23,11 @@ class CreateInformacionSerializer(serializers.ModelSerializer):
             if(result_serializer):
                 fileName = "." + result_serializer.data['archivo']
                 if os.path.exists(fileName): 
-                    self.informacion(fileName, validated_data)                    
-                            
-        #df = pd.read_excel(file_name, sheet_name=None)
+                    self.informacion(fileName, validated_data)                               
+        
         #return super().create(validated_data)
-        return True
-    
+        return True    
+
     def informacion(self, fileName, validated_data):
         df_informacion = pd.read_excel(fileName, sheet_name='INFO', skiprows=4, usecols="A:G")    
         cnx = CnxDb()
@@ -41,3 +40,7 @@ class CreateInformacionSerializer(serializers.ModelSerializer):
             print(sql)
             if(cnx.get_cnx()):
                 cnx.insert_sql(sql)
+    
+    """def destroy(self, pk=None): 
+        print("*****destroy*****")
+        return True"""

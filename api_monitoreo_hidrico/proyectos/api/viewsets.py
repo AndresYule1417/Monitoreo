@@ -29,28 +29,28 @@ class ProyectosViewSet(viewsets.GenericViewSet):
         serializer = self.serializer_class(data=request.data)
         if(serializer.is_valid()):
             proyecto = serializer.save()       
-            data = {'id': proyecto.id}         
+            data = {'id': proyecto.id}                   
 
             informacion = CreateInformacionSerializer()
-            #print(informacion.create(data))
+            print("informacion", informacion.create(data))
 
             caudal = CreateCaudalSerializer()
-            #print(caudal.create(data))
+            print("caudal", caudal.create(data))#adicion de codigo v2
 
             rendimiento = CreateRendimientoSerializer()
-            #print(rendimiento.create(data))
+            print("rendimiento", rendimiento.create(data))#adicion de codigo v2
 
             escorrentia = CreateEscorrentiaSerializer()
-            #print(escorrentia.create(data))
+            print("escorrentia", escorrentia.create(data))#adicion de codigo v2
 
             oferta_multi_anual = CreateOfertaMultiAnualSerializer()
-            #print(oferta_multi_anual.create(data))
+            print("oferta_multi_anual", oferta_multi_anual.create(data))#adicion de codigo v2
 
             oferta_total = CreateOfertaTotalSerializer()
-            #print(oferta_total.create(data))
+            print("oferta_total", oferta_total.create(data))#adicion de codigo v2
 
             indice = CreateIndiceSerializer()
-            #print(indice.create(data))
+            print("indice", indice.create(data))#adicion de codigo v2
 
             return Response({'message': 'Proyecto Reguistrado'}, status=status.HTTP_201_CREATED)             
         return Response({'message': 'Error en Registro', 'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
@@ -64,6 +64,9 @@ class ProyectosViewSet(viewsets.GenericViewSet):
     #Funcion que resive la peticion delete y elimina el reguistro de un proyecto y su archivo asociado
     def destroy(self, request, pk=None): 
         result = self.serializer_class().Meta.model.objects.filter(id=pk).first()
+
+        #print("CreateInformacionSerializer", CreateInformacionSerializer().destroy(pk))
+
         #if(result[0] != 0):
         if result:            
             result_serializer = self.serializer_class(result)  

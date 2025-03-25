@@ -11,11 +11,13 @@ from datetime import datetime
 
 from api_db.cnx_db import CnxDb
 
+#clase para serializar el modelo oferta multi-anual
 class CreateOfertaMultiAnualSerializer(serializers.ModelSerializer):
     class Meta:
         model = OfertaMultiAnual
         fields = "__all__"
     
+    #funcion para guardar los datos
     def create(self, validated_data):       
         result = Proyectos.objects.filter(id=validated_data['id']).first()        
         if result:                       
@@ -28,6 +30,7 @@ class CreateOfertaMultiAnualSerializer(serializers.ModelSerializer):
         #return super().create(validated_data)
         return True
     
+    #funcion que lee el documento excel y guarda los datos en l base de datos
     def oferta_multianual(self, fileName, validated_data):
         df_rh_medio = pd.read_excel(fileName, sheet_name='OFERTA MULTIANUAL', skiprows=4, usecols="A:M")    
         df_rh_medio.rename(columns={'Unnamed: 0':'UA'}, inplace=True)                   

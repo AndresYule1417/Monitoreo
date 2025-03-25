@@ -11,11 +11,13 @@ from datetime import datetime
 
 from api_db.cnx_db import CnxDb
 
+#clase que serializa el modelo indice
 class CreateIndiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rendimiento
         fields = "__all__"
     
+    #funcion que verifica si existe el archivo
     def create(self, validated_data):       
         result = Proyectos.objects.filter(id=validated_data['id']).first()        
         if result:                       
@@ -28,6 +30,7 @@ class CreateIndiceSerializer(serializers.ModelSerializer):
         #return super().create(validated_data)
         return True
     
+    #funcion que lee el docuemto excel y los datos los guarda en la base de datos
     def indice(self, fileName, validated_data):
         df_rh_medio = pd.read_excel(fileName, sheet_name='Indice_Medio')    
         df_rh_medio.rename(columns={'Unnamed: 0':'UA'}, inplace=True)                   

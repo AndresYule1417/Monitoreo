@@ -2,6 +2,7 @@ from django.db import models
 
 from proyectos.models import Proyectos
 
+#clase que crea el modelo de oferta total y crea los campos en la base de datos
 class OfertaTotal(models.Model):
     id_proyecto = models.ForeignKey(Proyectos, to_field='id', db_column='id_proyecto', on_delete=models.RESTRICT, null=False, blank=False)
     fecha = models.CharField(max_length=32, null=False, blank=False)

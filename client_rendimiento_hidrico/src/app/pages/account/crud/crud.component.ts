@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { NgxSpinnerService } from "ngx-spinner";//adicion de codigo v2
 
 import { DialogCrudComponent } from './dialog-crud/dialog-crud.component';
 
@@ -33,7 +34,7 @@ export class CrudComponent implements OnInit {
   });
 
   //inizializacion de clases
-  constructor(private router:Router, private service:CrudService, public dialog: MatDialog){}
+  constructor(private router:Router, private service:CrudService, public dialog: MatDialog, private spinner: NgxSpinnerService){}//adicion de codigo v2
 
   //al inicializar el componente se obtiene la lista de todos los proyectos
   ngOnInit(): void {
@@ -51,8 +52,10 @@ export class CrudComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }     
+    this.spinner.show();
     this.service.create(this.form.value, this.archivo, this.archivo_geo).subscribe({//adicion de codigo
-      next: (result) => {        
+      next: (result) => { 
+        this.spinner.hide();       
         this.form.reset();
         this.submitted = false;
         this.getList();    
