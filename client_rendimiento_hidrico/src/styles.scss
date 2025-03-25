@@ -1,0 +1,49 @@
+.accordionOHTS{
+    background-color: #ccc;
+    padding: 16px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    font-size: 15px;
+    margin-bottom: 8px;
+    margin-Top: 8px;
+}
+
+.accordionOHTS:hover{
+    background-color: #F0F0F0;     
+}
+
+.accordion{
+    background-color: #ccc;
+    padding: 16px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    font-size: 15px;
+    margin-bottom: 8px;
+    margin-top: 8px;
+}
+
+.accordion:hover{
+    background-color: #F0F0F0;     
+}
+
+.myCursor{
+    cursor: pointer;
+}
+
+.headDiv{
+    width: 100%;   
+    background-color: #34495e;
+    color: white;   
+    text-align: center;  
+    padding-top: 8px; 
+    padding-bottom: 8px;
+}
+
+.rotateText{
+    transform-origin: left;
+    transform: translate(50%, 50%) rotate(-90deg);    
+    position: relative; 
+    top: 50%;
+}

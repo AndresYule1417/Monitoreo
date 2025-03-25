@@ -1,0 +1,13 @@
+<!--Html para generar spiner mientras carga-->
+<ngx-spinner type="ball-scale-multiple"></ngx-spinner>
+
+<div class="headDiv">
+    <h4 style="margin: 0;">RENDIMIENTO HIDRICO</h4>
+</div>
+
+<!--Genera los tabs y renderiza las imagenes-->
+<mat-tab-group (selectedTabChange)="tabChanged($event)">
+    <mat-tab *ngFor="let item of listProyectos; let j=index" [label]="(j+1) + '. ' + item.nombre">        
+        <div class="space{{j}}" style="width:100%;"></div>        
+    </mat-tab>    
+</mat-tab-group>
