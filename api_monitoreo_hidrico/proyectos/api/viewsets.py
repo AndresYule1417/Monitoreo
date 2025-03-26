@@ -34,23 +34,23 @@ class ProyectosViewSet(viewsets.GenericViewSet):
             informacion = CreateInformacionSerializer()
             print("informacion", informacion.create(data))
 
-            caudal = CreateCaudalSerializer()
-            print("caudal", caudal.create(data))#adicion de codigo v2
+            #caudal = CreateCaudalSerializer()
+            #print("caudal", caudal.create(data))#adicion de codigo v2
 
-            rendimiento = CreateRendimientoSerializer()
-            print("rendimiento", rendimiento.create(data))#adicion de codigo v2
+            #rendimiento = CreateRendimientoSerializer()
+            #print("rendimiento", rendimiento.create(data))#adicion de codigo v2
 
-            escorrentia = CreateEscorrentiaSerializer()
-            print("escorrentia", escorrentia.create(data))#adicion de codigo v2
+            #escorrentia = CreateEscorrentiaSerializer()
+            #print("escorrentia", escorrentia.create(data))#adicion de codigo v2
 
-            oferta_multi_anual = CreateOfertaMultiAnualSerializer()
-            print("oferta_multi_anual", oferta_multi_anual.create(data))#adicion de codigo v2
+            #oferta_multi_anual = CreateOfertaMultiAnualSerializer()
+            #print("oferta_multi_anual", oferta_multi_anual.create(data))#adicion de codigo v2
 
-            oferta_total = CreateOfertaTotalSerializer()
-            print("oferta_total", oferta_total.create(data))#adicion de codigo v2
+            #oferta_total = CreateOfertaTotalSerializer()
+            #print("oferta_total", oferta_total.create(data))#adicion de codigo v2
 
-            indice = CreateIndiceSerializer()
-            print("indice", indice.create(data))#adicion de codigo v2
+            #indice = CreateIndiceSerializer()
+            #print("indice", indice.create(data))#adicion de codigo v2
 
             return Response({'message': 'Proyecto Reguistrado'}, status=status.HTTP_201_CREATED)             
         return Response({'message': 'Error en Registro', 'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
@@ -76,6 +76,9 @@ class ProyectosViewSet(viewsets.GenericViewSet):
             archivo_geo = "." + str(result_serializer.data['archivo_geo'])#adicion de codigo            
             if(os.path.exists(archivo_geo)):
                 os.remove(archivo_geo) 
+            
+            informacion = CreateInformacionSerializer()
+            print(informacion.destroy())
             
             result_delete = result.delete()       
             if(result_delete[0] != 0):

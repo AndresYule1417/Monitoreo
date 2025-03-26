@@ -41,6 +41,6 @@ class CreateInformacionSerializer(serializers.ModelSerializer):
             if(cnx.get_cnx()):
                 cnx.insert_sql(sql)
     
-    """def destroy(self, pk=None): 
-        print("*****destroy*****")
-        return True"""
+    def destroy(self, pk=None): 
+        print("*****destroy*****", pk)
+        return True
