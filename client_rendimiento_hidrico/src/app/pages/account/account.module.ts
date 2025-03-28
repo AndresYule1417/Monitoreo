@@ -20,6 +20,7 @@ import { OfertaHidricaComponent } from './oferta-hidrica/oferta-hidrica.componen
 import { RendimientoHidricoComponent } from './rendimiento-hidrico/rendimiento-hidrico.component';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { IndiceHidricoComponent } from './indice-hidrico/indice-hidrico.component';
+import { IndiceUsoComponent } from './indice-uso/indice-uso.component';
 
 
 //declaracion de componentes creados por el usuario
@@ -36,7 +37,8 @@ import { IndiceHidricoComponent } from './indice-hidrico/indice-hidrico.componen
     NewsComponent,
     OfertaHidricaComponent,
     RendimientoHidricoComponent,
-    IndiceHidricoComponent
+    IndiceHidricoComponent,  
+    IndiceUsoComponent
   ],
   imports: [
     CommonModule,

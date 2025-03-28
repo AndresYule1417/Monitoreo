@@ -34,4 +34,9 @@ export class AccountsService {
   create(data:any){           
     return this.http.post(`${environment.API_URL}/usuarios/1/custom_create/`, data);
   }
+
+  listIndiceUso(){
+    const headers  = { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('user') || '{}').token + ''};
+    return this.http.get(`${environment.API_URL}/indice_uso`, {headers});
+  }
 }

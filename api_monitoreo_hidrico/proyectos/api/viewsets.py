@@ -20,6 +20,8 @@ from oferta_multianual.api.serializers import CreateOfertaMultiAnualSerializer
 from oferta_total.api.serializers import CreateOfertaTotalSerializer
 from indice.api.serializers import CreateIndiceSerializer
 
+from informacion.api.viewsets import InformacionViewSet
+
 class ProyectosViewSet(viewsets.GenericViewSet):
     model: Proyectos
     serializer_class = CreateProyectoSerializer
@@ -34,23 +36,23 @@ class ProyectosViewSet(viewsets.GenericViewSet):
             informacion = CreateInformacionSerializer()
             print("informacion", informacion.create(data))
 
-            #caudal = CreateCaudalSerializer()
-            #print("caudal", caudal.create(data))#adicion de codigo v2
+            caudal = CreateCaudalSerializer()
+            print("caudal", caudal.create(data))#adicion de codigo v2
 
-            #rendimiento = CreateRendimientoSerializer()
-            #print("rendimiento", rendimiento.create(data))#adicion de codigo v2
+            rendimiento = CreateRendimientoSerializer()
+            print("rendimiento", rendimiento.create(data))#adicion de codigo v2
 
-            #escorrentia = CreateEscorrentiaSerializer()
-            #print("escorrentia", escorrentia.create(data))#adicion de codigo v2
+            escorrentia = CreateEscorrentiaSerializer()
+            print("escorrentia", escorrentia.create(data))#adicion de codigo v2
 
-            #oferta_multi_anual = CreateOfertaMultiAnualSerializer()
-            #print("oferta_multi_anual", oferta_multi_anual.create(data))#adicion de codigo v2
+            oferta_multi_anual = CreateOfertaMultiAnualSerializer()
+            print("oferta_multi_anual", oferta_multi_anual.create(data))#adicion de codigo v2
 
-            #oferta_total = CreateOfertaTotalSerializer()
-            #print("oferta_total", oferta_total.create(data))#adicion de codigo v2
+            oferta_total = CreateOfertaTotalSerializer()
+            print("oferta_total", oferta_total.create(data))#adicion de codigo v2
 
-            #indice = CreateIndiceSerializer()
-            #print("indice", indice.create(data))#adicion de codigo v2
+            indice = CreateIndiceSerializer()
+            print("indice", indice.create(data))#adicion de codigo v2
 
             return Response({'message': 'Proyecto Reguistrado'}, status=status.HTTP_201_CREATED)             
         return Response({'message': 'Error en Registro', 'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
@@ -63,10 +65,8 @@ class ProyectosViewSet(viewsets.GenericViewSet):
 
     #Funcion que resive la peticion delete y elimina el reguistro de un proyecto y su archivo asociado
     def destroy(self, request, pk=None): 
-        result = self.serializer_class().Meta.model.objects.filter(id=pk).first()
-
-        #print("CreateInformacionSerializer", CreateInformacionSerializer().destroy(pk))
-
+        result = self.serializer_class().Meta.model.objects.filter(id=pk).first()       
+        
         #if(result[0] != 0):
         if result:            
             result_serializer = self.serializer_class(result)  
@@ -75,12 +75,15 @@ class ProyectosViewSet(viewsets.GenericViewSet):
                 os.remove(archivo) 
             archivo_geo = "." + str(result_serializer.data['archivo_geo'])#adicion de codigo            
             if(os.path.exists(archivo_geo)):
-                os.remove(archivo_geo) 
+                os.remove(archivo_geo)             
             
+            #print("*****1*****", result_serializer.data['id'])
+            #informacion = InformacionViewSet()
             informacion = CreateInformacionSerializer()
-            print(informacion.destroy())
-            
-            result_delete = result.delete()       
+            print(informacion.destroy(result_serializer.data['id']))
+            print("****10*****")
+
+            result_delete = result.delete()                
             if(result_delete[0] != 0):
                 return Response({'message': 'Proyecto eliminado'}, status=status.HTTP_200_OK)
         return Response({'message': 'No existe proyecto'}, status=status.HTTP_404_NOT_FOUND) 

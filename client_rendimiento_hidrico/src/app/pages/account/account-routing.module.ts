@@ -11,6 +11,7 @@ import { NewsComponent } from './news/news.component';
 import { OfertaHidricaComponent } from './oferta-hidrica/oferta-hidrica.component';
 import { RendimientoHidricoComponent } from './rendimiento-hidrico/rendimiento-hidrico.component';
 import { IndiceHidricoComponent } from './indice-hidrico/indice-hidrico.component';
+import { IndiceUsoComponent } from './indice-uso/indice-uso.component';
 
 import { roleGuard } from '../../shared/guards/role.guard';
 
@@ -29,7 +30,8 @@ const routes: Routes = [
       {path: "news", component: NewsComponent},
       {path: "rendimiento_hidrico", component: RendimientoHidricoComponent},
       {path: "oferta_hidrica", component: OfertaHidricaComponent},
-      {path: "indice_hidrico", component: IndiceHidricoComponent}
+      {path: "indice_hidrico", component: IndiceHidricoComponent},
+      {path: "indice_uso", component: IndiceUsoComponent}
     ]
   }  
 ];

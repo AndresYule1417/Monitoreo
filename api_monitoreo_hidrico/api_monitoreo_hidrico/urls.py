@@ -22,4 +22,6 @@ urlpatterns = [
 
     path('usuarios/', include('usuarios.api.routers')),
     path('proyectos/', include('proyectos.api.routers')),
+    path('indice_uso/', include('indice_uso.api.routers')),
+
 ]
