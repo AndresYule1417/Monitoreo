@@ -11,6 +11,7 @@ import { StartComponent } from './start/start.component';
 import { RecoverComponent } from './recover/recover.component';
 import { RecoverPasswordComponent } from './recover-password/recover-password.component';
 
+
 //archivo donde se cargan los modulos creados por el usuario y se importan 
 //componentes que se van a utilizar
 @NgModule({
@@ -19,7 +20,7 @@ import { RecoverPasswordComponent } from './recover-password/recover-password.co
     RegisterComponent,
     StartComponent,
     RecoverComponent,
-    RecoverPasswordComponent    
+    RecoverPasswordComponent,       
   ],
   imports: [
     CommonModule,    
@@ -32,6 +33,9 @@ import { RecoverPasswordComponent } from './recover-password/recover-password.co
     ThemeDirective,
     FormsModule, 
     ReactiveFormsModule
+  ],
+  exports: [
+    StartComponent,    
   ]
 })
 export class HomeModule { }

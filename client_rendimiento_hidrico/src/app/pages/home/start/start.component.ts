@@ -21,10 +21,10 @@ export class StartComponent implements OnInit {
 
   //funcion que se ejecuta despues del constructor
   //verifica si el usuario esta logeado
-  ngOnInit(): void {    
+  ngOnInit(): void {      
     this.service.checkToken().subscribe({      
       next: (result)=>{
-        this.router.navigate(['/account']);
+        this.router.navigate([this.router.url]);
         return false;
       }
     });
@@ -51,8 +51,8 @@ export class StartComponent implements OnInit {
   }
 
   //funcion q navega dentro de la misma pagina
-  jumpToSection(section: string | null) {
-    if(section){
+  jumpToSection(section: string | null) {    
+    if(section){      
       document.getElementById(section)?.scrollIntoView({behavior:'smooth'});
     }      
   }  

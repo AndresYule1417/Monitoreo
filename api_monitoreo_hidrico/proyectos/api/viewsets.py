@@ -134,22 +134,23 @@ class ProyectosViewSet(viewsets.GenericViewSet):
         result = self.serializer_class().Meta.model.objects.filter(id=pk).first()#consulta que retorna el dato con la llave primaria        
         if result:            
             result_serializer = self.serializer_class(result)           
-            fileName = "." + result_serializer.data['archivo']        
+            fileName = "." + result_serializer.data['archivo']    
+             
             if os.path.exists(fileName):        
-                df_medio = pd.read_excel(fileName, sheet_name='Indice_Medio')  
-                #df_medio.rename(columns={'Unnamed: 0':'UA'}, inplace=True)
+                df_medio = pd.read_excel(fileName, sheet_name='Indice_Medio')                  
+                df_medio.rename(columns={'Unnamed: 0':'UA'}, inplace=True)                           
                 #df_medio = df_medio.reset_index(drop=True).set_index('UA')
                 result1 = df_medio.to_json(orient="split")#records - index -split
                 parsed1 = loads(result1)                      
 
-                df_seco = pd.read_excel(fileName, sheet_name='Indice_Seco')
-                #df_seco.rename(columns={'Unnamed: 15':'UA'}, inplace=True)
+                df_seco = pd.read_excel(fileName, sheet_name='Indice_Seco')                
+                df_seco.rename(columns={'Unnamed: 0':'UA'}, inplace=True)
                 #df_seco = df_seco.reset_index(drop=True).set_index('UA')
                 result2 = df_seco.to_json(orient="split")
                 parsed2 = loads(result2)            
 
-                df_humedo = pd.read_excel(fileName, sheet_name='Indice_Humedo')
-                #df_humedo.rename(columns={'Unnamed: 29':'UA'}, inplace=True)
+                df_humedo = pd.read_excel(fileName, sheet_name='Indice_Humedo')                
+                df_humedo.rename(columns={'Unnamed: 0':'UA'}, inplace=True)
                 #df_humedo = df_humedo.reset_index(drop=True).set_index('UA')
                 result3 = df_humedo.to_json(orient="split")
                 parsed3 = loads(result3)                   

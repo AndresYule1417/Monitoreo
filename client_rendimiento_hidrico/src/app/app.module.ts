@@ -11,6 +11,8 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './pages/home/home.component';
 import { AccountComponent } from './pages/account/account.component';
 
+import { HomeModule } from './pages/home/home.module';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,7 +26,8 @@ import { AccountComponent } from './pages/account/account.component';
     GoogleMapsModule,  
     BrowserAnimationsModule,
     MatTabsModule,
-    NgxSpinnerModule 
+    NgxSpinnerModule,
+    HomeModule    
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [

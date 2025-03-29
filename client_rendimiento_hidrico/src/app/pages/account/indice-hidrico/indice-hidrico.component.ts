@@ -53,7 +53,7 @@ export class IndiceHidricoComponent implements OnInit {
         divMedio.style.background = "#41556b";
         divMedio.style.color = "white";
         divMedio.style.paddingLeft = "16px";
-        divMedio.innerText = "MEDIO";
+        divMedio.innerText = "AÑO MEDIO";
 
         this.space.appendChild(divMedio);
         
@@ -80,8 +80,13 @@ export class IndiceHidricoComponent implements OnInit {
             myString = myString.replaceAll("'", '');            
             //myString = myString.replaceAll(' ', '');
             var myList = myString.split(",");
-            td.style.background = myList[1];
-            td.innerHTML = "<p style='margin:4px'>" + myList[0] + "</p>";            
+            td.style.background = myList[1];           
+            if(isNaN(Number(myList[0]))){
+              td.innerHTML = "<p style='margin:4px'>" + myList[0] + "</p>"; 
+            }else{
+              td.innerHTML = "<p style='margin:4px'>" + Number(myList[0]).toFixed(4) + "</p>"; 
+            }
+                       
             tr.appendChild(td);
           }  
           table_1.appendChild(tr);      
@@ -160,7 +165,7 @@ export class IndiceHidricoComponent implements OnInit {
         divSeco.style.color = "white";
         divSeco.style.paddingLeft = "16px";
         divSeco.style.border = "solid 1px";
-        divSeco.innerText = "SECO";
+        divSeco.innerText = "AÑO SECO";
 
         this.space.appendChild(divSeco);
         
@@ -188,7 +193,12 @@ export class IndiceHidricoComponent implements OnInit {
             //myString = myString.replaceAll(' ', '');
             var myList = myString.split(",");
             td22.style.background = myList[1];
-            td22.innerHTML = "<p style='margin:4px'>" + myList[0] + "</p>";            
+            if(isNaN(Number(myList[0]))){
+              td22.innerHTML = "<p style='margin:4px'>" + myList[0] + "</p>";
+            }else{
+              td22.innerHTML = "<p style='margin:4px'>" + Number(myList[0]).toFixed(4) + "</p>";
+            }
+                        
             tr_22.appendChild(td22);
           }  
           table_2.appendChild(tr_22);      
@@ -267,7 +277,7 @@ export class IndiceHidricoComponent implements OnInit {
         divHumedo.style.background = "#41556b";
         divHumedo.style.color = "white";
         divHumedo.style.paddingLeft = "16px";
-        divHumedo.innerText = "HUMEDO";
+        divHumedo.innerText = "AÑO HUMEDO";
 
         this.space.appendChild(divHumedo);
         
@@ -295,7 +305,11 @@ export class IndiceHidricoComponent implements OnInit {
             //myString = myString.replaceAll(' ', '');
             var myList = myString.split(",");
             td23.style.background = myList[1];
-            td23.innerHTML = "<p style='margin:4px'>" + myList[0] + "</p>";            
+            if(isNaN(Number(myList[0]))){
+              td23.innerHTML = "<p style='margin:4px'>" + myList[0] + "</p>"; 
+            }else{
+              td23.innerHTML = "<p style='margin:4px'>" + Number(myList[0]).toFixed(4) + "</p>"; 
+            }                       
             tr_23.appendChild(td23);
           }  
           table_3.appendChild(tr_23);      

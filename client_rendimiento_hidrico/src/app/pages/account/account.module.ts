@@ -22,6 +22,7 @@ import { NgxSpinnerModule } from "ngx-spinner";
 import { IndiceHidricoComponent } from './indice-hidrico/indice-hidrico.component';
 import { IndiceUsoComponent } from './indice-uso/indice-uso.component';
 
+import { HomeModule } from '../home/home.module'; 
 
 //declaracion de componentes creados por el usuario
 //importacion de modulos a utilizar
@@ -38,8 +39,8 @@ import { IndiceUsoComponent } from './indice-uso/indice-uso.component';
     OfertaHidricaComponent,
     RendimientoHidricoComponent,
     IndiceHidricoComponent,  
-    IndiceUsoComponent
-  ],
+    IndiceUsoComponent,     
+  ],  
   imports: [
     CommonModule,
     AccountRoutingModule,
@@ -50,7 +51,9 @@ import { IndiceUsoComponent } from './indice-uso/indice-uso.component';
     MatTableModule,   
     GoogleMapsModule,
     MatTabsModule,    
-    NgxSpinnerModule 
+    NgxSpinnerModule,    
+    HomeModule
   ]
+  
 })
 export class AccountModule { }

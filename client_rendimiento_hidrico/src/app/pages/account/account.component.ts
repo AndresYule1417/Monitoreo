@@ -4,7 +4,7 @@ import { fromEvent, Observable, Subscription } from "rxjs";
 import { LoginService } from '../home/login/login.service';
 
 @Component({
-  selector: 'app-account',
+  selector: 'app-account',  
   templateUrl: './account.component.html',
   styleUrl: './account.component.scss'
 })
