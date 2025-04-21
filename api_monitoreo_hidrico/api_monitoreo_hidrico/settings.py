@@ -140,17 +140,17 @@ AUTH_USER_MODEL = 'usuarios.CustomUser'
 #Configuracion de cabezeras que permiten el acceso del lado del cliente
 CORS_ALLOWED_ORIGINS = [        
     "http://localhost:4200",   
-    "http://10.10.10.3:4200",     
+    "http://10.10.10.13:4200",     
 ]
 
 CORS_ALLOWED_ORIGIN_REGEXES = [
     "http://localhost:4200",  
-    "http://10.10.10.3:4200",     
+    "http://10.10.10.13:4200",     
 ]
 
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:4200",  
-    "http://10.10.10.3:4200",     
+    "http://10.10.10.13:4200",     
 ]
 
 #Configuracion de parametros para el uso de las seciones
