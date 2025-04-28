@@ -47,3 +47,12 @@
     position: relative; 
     top: 50%;
 }
+
+.table_iuh{
+    width: 100%;
+}
+
+.table_iuh, .tr_iuh, .th_iuh{
+    border: solid 1px black;
+    padding-left: 8px;
+}
